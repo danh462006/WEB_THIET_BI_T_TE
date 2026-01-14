@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tin tức - Kiến thức | Đức Phương Medical</title>
+    <link rel="icon" type="image/png" href="hinh-anh/logo-favicon.png">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="category-style.css">
+    <link rel="stylesheet" href="profile-modal.css">
+    <link rel="stylesheet" href="mobile-responsive.css">
+    <script src="auth-redirect.js?v=2"></script>
+    <script src="profile-modal.js?v=2"></script>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo-section">
+                <img src="hinh-anh/logo.png" alt="TBYT Đức Phương" class="logo">
+            </div>
+            <div class="search-section">
+                <div class="search-box">
+                    <input type="text" placeholder="Tìm Kiếm ..." class="search-input" autocomplete="off" readonly onfocus="this.removeAttribute('readonly'); this.value='';" name="search_q_xyz" id="searchQuery">
+                    <button class="search-btn">🔍</button>
+                </div>
+                <div class="search-suggestions" id="searchSuggestions"></div>
+            </div>
+            <div class="user-section">
+                <div class="account-dropdown">
+                    <button class="account-btn" onclick="handleAccountClick(event)">
+                        <img src="hinh-anh/icon_tk.png" alt="Tài khoản" class="account-icon">
+                    </button>
+                    <div id="usernameDisplay" class="username-display" style="display: none;"></div>
+                    <div class="account-menu" id="accountMenu" style="min-width: 150px; right: 0; left: auto;">
+                        <a href="#" onclick="event.stopPropagation(); openProfileModal(); return false;">Thông tin tài khoản</a>
+                        <a href="#">Đơn hàng của tôi</a>
+                        <a href="#" onclick="handleLogout(); return false;">Đăng xuất</a>
+                    </div>
+                </div>
+                <button class="cart-btn">🛒 Giỏ hàng</button>
+                <div class="dropdown">
+                    <button class="dropdown-btn">📋 Danh mục ▼</button>
+                    <div class="dropdown-content">
+                        <a href="index.html">Trang chủ</a>
+                        <div class="dropdown-item-with-submenu">
+                            <a href="#" class="has-submenu">Sản phẩm</a>
+                            <div class="submenu">
+                                <div class="submenu-content">
+                                    <div class="category-header">
+                                        <h3>🔥 Gợi ý cho bạn</h3>
+                                    </div>
+                                    <div class="category-brands">
+                                        <div class="brand-item" data-category="Giường"><img src="icon-hinhdanhmuc/nhom-giuong.png" alt="Giường" class="category-icon">Giường</div>
+                                        <div class="brand-item" data-category="Xe lăn"><img src="icon-hinhdanhmuc/nhom-xelan.png" alt="Xe lăn" class="category-icon">Xe lăn</div>
+                                        <div class="brand-item" data-category="Xe Scooter điện"><img src="icon-hinhdanhmuc/nhom-xedien.png" alt="Xe Scooter điện" class="category-icon">Xe Scooter điện</div>
+                                        <div class="brand-item" data-category="Băng ca"><img src="icon-hinhdanhmuc/nhom-bangca.png" alt="Băng ca" class="category-icon">Băng ca</div>
+                                        <div class="brand-item" data-category="Tủ"><img src="icon-hinhdanhmuc/nhom-tu.png" alt="Tủ" class="category-icon">Tủ</div>
+                                        <div class="brand-item" data-category="Máy tạo oxy"><img src="icon-hinhdanhmuc/nhom-maytaooxy.png" alt="Máy tạo oxy" class="category-icon">Máy tạo oxy</div>
+                                        <div class="brand-item" data-category="Máy đo"><img src="icon-hinhdanhmuc/nhom-maydo.png" alt="Máy đo" class="category-icon">Máy đo</div>
+                                        <div class="brand-item" data-category="Máy xông"><img src="icon-hinhdanhmuc/nhom-xong.png" alt="Máy xông" class="category-icon">Máy xông</div>
+                                        <div class="brand-item" data-category="Máy hút dịch"><img src="icon-hinhdanhmuc/nhom-mayhutdich.png" alt="Máy hút dịch" class="category-icon">Máy hút dịch</div>
+                                        <div class="brand-item" data-category="Máy massage"><img src="icon-hinhdanhmuc/nhom-massage.png" alt="Máy massage" class="category-icon">Máy massage</div>
+                                        <div class="brand-item" data-category="Thiết bị tập"><img src="icon-hinhdanhmuc/nhom-maytap.png" alt="Thiết bị tập" class="category-icon">Thiết bị tập</div>
+                                        <div class="brand-item" data-category="Nệm"><img src="icon-hinhdanhmuc/nhom-nem.png" alt="Nệm" class="category-icon">Nệm</div>
+                                        <div class="brand-item" data-category="Dụng cụ hỗ trợ"><img src="icon-hinhdanhmuc/nhom-dungcuhotro.png" alt="Dụng cụ hỗ trợ" class="category-icon">Dụng cụ hỗ trợ</div>
+                                        <div class="brand-item" data-category="Thiết bị y tế khác"><img src="icon-hinhdanhmuc/nhom-thietbiyte.png" alt="Thiết bị y tế khác" class="category-icon">Thiết bị y tế khác</div>
+                                    </div>
+                                    <div class="category-main">
+                                        <div class="category-detail" id="categoryDetail">
+                                            <p>Di chuột vào các nhóm sản phẩm ở trên để xem chi tiết</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="thong-tin.html">Giới thiệu</a>
+                        <a href="tin-tuc.html">Tin tức - Kiến thức</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Login Modal (copy from trang chủ) -->
+    <div id="loginModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeLoginForm()">&times;</span>
+            <div class="login-container">
+                <div class="login-header">
+                    <div class="service-icons">
+                        <div class="fpt-icon">TaJerMy</div>
+                        <div class="arrow">→</div>
+                        <div class="shop-icon">🛍️</div>
+                    </div>
+                    <h2>Tài khoản sử dụng dịch vụ <span class="fpt-logo">TaJerMy</span></h2>
+                </div>
+                <div class="login-form">
+                    <div id="loginStep1">
+                        <label>Tên đăng nhập / Số điện thoại <span class="required">*</span></label>
+                        <input type="text" id="loginInput" placeholder="Nhập tên đăng nhập hoặc số điện thoại" class="login-input">
+                        <button class="continue-btn" onclick="handleLoginStep1()">Tiếp tục</button>
+                    </div>
+                    <div id="loginStep2" style="display: none;">
+                        <div class="login-header-step2"><button class="back-btn" onclick="backToStep1()">←</button> Nhập mật khẩu</div>
+                        <label>Mật khẩu <span class="required">*</span></label>
+                        <input type="password" id="loginPassword" placeholder="Nhập mật khẩu" class="login-input">
+                        <button type="button" class="continue-btn" onclick="handleLoginStep2()">Đăng nhập</button>
+                    </div>
+                    <div id="registerStep" style="display: none;">
+                        <span onclick="backToLogin()" style="position: absolute; top: 10px; left: 20px; font-size: 30px; font-weight: bold; color: #aaa; cursor: pointer; z-index: 10;">←</span>
+                        <div style="text-align: center; font-weight: bold; font-size: 18px; margin-bottom: 15px; margin-top: -10px;">Đăng ký tài khoản</div>
+                        <label>Tên đăng nhập <span class="required">*</span></label>
+                        <input type="text" id="regUsername" class="login-input" placeholder="Nhập tên đăng nhập" style="margin-bottom: 5px;">
+                        <label>Số điện thoại <span class="required">*</span></label>
+                        <input type="text" id="regPhone" class="login-input" placeholder="Nhập số điện thoại" style="margin-bottom: 5px;">
+                        <label>Email <span class="required">*</span></label>
+                        <input type="email" id="regGmail" class="login-input" placeholder="Nhập email" style="margin-bottom: 5px;">
+                        <label>Mật khẩu <span class="required">*</span></label>
+                        <input type="password" id="regPass" class="login-input" placeholder="Nhập mật khẩu" style="margin-bottom: 5px;">
+                        <label>Mã xác nhận <span class="required">*</span></label>
+                        <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                            <input type="text" id="regCode" class="login-input" placeholder="Nhập mã xác nhận" style="flex: 1; margin-bottom: 0;">
+                            <button type="button" class="continue-btn" onclick="sendVerificationCode()" style="width: auto; margin: 0; padding: 0 15px;">Nhận mã</button>
+                        </div>
+                        <button class="continue-btn" onclick="handleRegister()">Đăng ký</button>
+                        <div id="registerMessage" style="text-align: center; margin-top: 2px; font-weight: bold;"></div>
+                    </div>
+                    <p class="terms-text">
+                        Bằng cách tiếp tục, bạn đồng ý với 
+                        <a href="#" class="link">Điều khoản</a> và 
+                        <a href="#" class="link">Chính sách</a> bảo mật của TaJerMy
+                    </p>
+                    <div class="divider">
+                        <span>Hoặc đăng nhập bằng</span>
+                    </div>      
+                    <div class="social-login">
+                        <button class="social-btn apple-btn" onclick="showRegisterForm()">Đăng ký</button>
+                        <button class="social-btn google-btn">
+                            <img src="hinh-anh/google-logo.png" alt="Google" class="google-icon">
+                        </button>
+                        <button class="social-btn facebook-btn">
+                            <img src="hinh-anh/fb-logo.png" alt="Facebook" class="facebook-icon">
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <main>
+        <section class="news-hero">
+            <div class="container">
+                <div class="news-hero-text">
+                    <p class="eyebrow">Tin tức - Kiến thức</p>
+                    <h1>Video hướng dẫn, kiến thức y tế hữu ích</h1>
+                    <p class="sub">Xem nhanh các video chọn lọc, kèm bình luận trao đổi ở mỗi liên kết.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="news-list-section">
+            <div class="container">
+                <div id="newsList" class="news-grid"></div>
+                <div id="newsEmpty" class="news-empty" style="display:none;">Chưa có video nào. Vui lòng quay lại sau.</div>
+            </div>
+        </section>
+    </main>
+
+    <div id="videoModal" class="video-modal" style="display:none;">
+        <div class="video-modal-backdrop" onclick="closeVideoModal()"></div>
+        <div class="video-modal-content">
+            <button class="video-modal-close" onclick="closeVideoModal()">×</button>
+            <div class="video-embed" id="videoEmbed"></div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Hỗ trợ khách hàng</h3>
+                    <ul>
+                        <li>Hotline: 0937 043 808</li>
+                        <li>(8-21h kể cả T7, CN)</li>
+                        <li>Điều khoản dịch vụ</li>
+                        <li>Chính sách phục vụ</li>
+                        <li>Chính sách đổi trả</li>
+                        <li>Chính sách bảo mật</li>
+                        <li>Chính sách vận chuyển</li>
+                        <li>Chính sách thanh toán</li>
+                        <li>Chính sách bảo hành</li>
+                        <li>Hỗ trợ khách hàng: ducphuongmedical@gmail.com</li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Bản tin sức khỏe</h3>
+                    <ul>
+                        <li>Tin tức về giường bệnh nhân</li>
+                        <li>Hướng dẫn sử dụng giường bệnh</li>
+                        <li>Hướng dẫn sử dụng xe lăn điện</li>
+                        <li>Tin tức về máy tạo Oxy</li>
+                        <li>Tin tức về Xe Lăn</li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Phương thức thanh toán</h3>
+                    <div class="payment-methods">
+                        <img src="hinh-thanhtoan/visa.png" alt="Visa">
+                        <img src="hinh-thanhtoan/mastercard.png" alt="Mastercard">
+                        <img src="hinh-thanhtoan/jcb.png" alt="JCB">
+                        <img src="hinh-thanhtoan/momo.png" alt="MoMo">
+                    </div>
+                    
+                    <h4>Dịch vụ giao hàng</h4>
+                    <div class="delivery-services">
+                        <img src="hinh-anh/giao-hang.png" alt="Giao hàng">
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Kết nối với chúng tôi</h3>
+                    <div class="social-links">
+                        <a href="https://www.facebook.com/ducphuongnguyenphuoctay" target="_blank">
+                            <img src="hinh-anh/fb-logo.png" alt="Facebook">
+                        </a>
+                        <a href="https://youtube.com/@ducphuongmedical" target="_blank">
+                            <img src="hinh-anh/youtube-icon.png" alt="YouTube">
+                        </a>
+                        <a href="https://zalo.me/0938.062.808" target="_blank">
+                            <img src="hinh-anh/icon-zalo.png" alt="Zalo">
+                        </a>
+                        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=ducphuongmedical@gmail.com" target="_blank">
+                            <img src="hinh-anh/icon-gmail.png" alt="Gmail">
+                        </a>
+                    </div>
+                    
+                    <div class="certificates">
+                        <h4>Chứng nhận bởi</h4>
+                        <div class="cert-logos">
+                            <img src="hinh-anh/icon-ddk.png" alt="Đã đăng ký">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <div class="footer-bottom-content">
+                    <div class="company-info">
+                        <p>Địa chỉ: 12 Đông Hồ, Phường 08, Quận Tân Bình, TP.HCM</p>
+                        <p>TaJerMy nhận đặt hàng trực tuyến và giao hàng tận nơi hoặc mua hàng trực tiếp tại cửa hàng</p>
+                        <p>Giấy chứng nhận Đăng ký Kinh doanh số 0313717853 do Sở Kế hoạch và Đầu tư Thành phố Hồ Chí Minh cấp ngày 25/03/2016</p>
+                        <p>&copy; 2022 - Bản quyền của TaJerMy - www.ducphuongmedical.com. Cấm sao chép dưới mọi hình thức nếu không có sự chấp thuận bằng văn bản.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <div class="phone-contact">
+        <a href="tel:0938062808" data-uid="contact-phone">
+            <img src="hinh-anh/icon-dt.png" alt="Điện thoại">
+        </a>
+    </div>
+    <div class="cskh-contact" onclick="toggleChat()">
+        <img src="hinh-anh/icon-cskh.png" alt="CSKH">
+    </div>
+    <div class="zalo-contact">
+        <a href="https://zalo.me/0938.062.808" target="_blank" data-uid="contact-zalo">
+            <img src="hinh-anh/icon-zalo.png" alt="Zalo">
+        </a>
+    </div>
+    <div class="youtube-contact">
+        <a href="https://www.youtube.com/@ducphuongmedical" target="_blank" data-uid="contact-youtube">
+            <img src="hinh-anh/youtube-icon.png" alt="YouTube">
+        </a>
+    </div>
+    <div class="facebook-contact">
+        <a href="https://www.facebook.com/ducphuongnguyenphuoctay" target="_blank" data-uid="contact-facebook">
+            <img src="hinh-anh/fb-logo.png" alt="Facebook">
+        </a>
+    </div>
+
+    <script>
+    const newsListEl = document.getElementById('newsList');
+    const newsEmptyEl = document.getElementById('newsEmpty');
+    const videoModal = document.getElementById('videoModal');
+    const videoEmbed = document.getElementById('videoEmbed');
+    let isLoggedIn = false;
+
+    function extractVideoId(url) {
+        if (/^[a-zA-Z0-9_-]{11}$/.test(url)) return url;
+        try {
+            const u = new URL(url);
+            if (u.searchParams.get('v')) return u.searchParams.get('v');
+            const pathParts = u.pathname.split('/').filter(Boolean);
+            if (u.hostname.includes('youtu.be') && pathParts[0]) return pathParts[0];
+            if ((pathParts[0] === 'embed' || pathParts[0] === 'v') && pathParts[1]) return pathParts[1];
+        } catch (e) { return null; }
+        return null;
+    }
+
+    function renderComments(videoId) {
+        const wrap = document.querySelector(`[data-comments="${videoId}"]`);
+        if (!wrap) return;
+        const listEl = wrap.querySelector('.comment-list');
+        listEl.innerHTML = '';
+        const stored = localStorage.getItem('news_comments_' + videoId);
+        const comments = stored ? JSON.parse(stored) : [];
+        if (!comments.length) {
+            listEl.innerHTML = '<div class="comment-empty">Chưa có bình luận nào.</div>';
+            return;
+        }
+        comments.forEach(c => {
+            const item = document.createElement('div');
+            item.className = 'comment-item';
+            item.innerHTML = `<div class="comment-name">${c.name || 'Ẩn danh'}</div><div class="comment-text">${c.text}</div><div class="comment-time">${c.time}</div>`;
+            listEl.appendChild(item);
+        });
+    }
+
+    function handleCommentSubmit(videoId, form) {
+        const name = form.querySelector('input[name="comment_name"]').value.trim() || 'Ẩn danh';
+        const text = form.querySelector('textarea[name="comment_text"]').value.trim();
+        if (!text) return;
+        const key = 'news_comments_' + videoId;
+        const existing = localStorage.getItem(key);
+        const comments = existing ? JSON.parse(existing) : [];
+        comments.unshift({ name, text, time: new Date().toLocaleString('vi-VN') });
+        localStorage.setItem(key, JSON.stringify(comments));
+        form.reset();
+        renderComments(videoId);
+    }
+
+    function openVideo(videoId) {
+        if (!videoId) return;
+        videoEmbed.innerHTML = `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>`;
+        videoModal.style.display = 'flex';
+    }
+
+    function closeVideoModal() {
+        videoModal.style.display = 'none';
+        videoEmbed.innerHTML = '';
+    }
+
+    // ===== Account menu (reuse logic từ trang chủ) =====
+    document.addEventListener('DOMContentLoaded', function() {
+        // Force clear search box on page load - multiple attempts
+        const searchInput = document.querySelector('.search-input');
+        if (searchInput) {
+            searchInput.value = '';
+            setTimeout(() => { searchInput.value = ''; }, 100);
+            setTimeout(() => { searchInput.value = ''; }, 500);
+        }
+        
+        checkLoginStatus();
+    });
+
+    function checkLoginStatus() {
+        fetch('check_session.php', { credentials: 'include' })
+            .then(r => r.json())
+            .then(data => {
+                const accountDropdown = document.querySelector('.account-dropdown');
+                const usernameDisplay = document.getElementById('usernameDisplay');
+                isLoggedIn = !!data.logged_in;
+                if (isLoggedIn) {
+                    sessionStorage.setItem('sessionLoggedIn', 'true');
+                    if (accountDropdown) accountDropdown.classList.add('logged-in');
+                    if (usernameDisplay) {
+                        usernameDisplay.innerText = data.username || '';
+                        usernameDisplay.style.display = 'block';
+                    }
+                } else {
+                    sessionStorage.removeItem('sessionLoggedIn');
+                    if (accountDropdown) accountDropdown.classList.remove('logged-in');
+                    if (usernameDisplay) usernameDisplay.style.display = 'none';
+                }
+            })
+            .catch(() => {});
+    }
+
+    function handleAccountClick(event) {
+        event.stopPropagation();
+        const accountMenu = document.getElementById('accountMenu');
+        if (!isLoggedIn) {
+            // Chưa đăng nhập: mở modal đăng nhập trực tiếp
+            toggleLoginForm();
+            return;
+        }
+        if (accountMenu.style.display === 'block') {
+            accountMenu.style.display = 'none';
+        } else {
+            accountMenu.style.display = 'block';
+        }
+    }
+
+    document.addEventListener('click', function(event) {
+        const accountDropdown = document.querySelector('.account-dropdown');
+        const accountMenu = document.getElementById('accountMenu');
+        if (accountDropdown && !accountDropdown.contains(event.target)) {
+            accountMenu.style.display = 'none';
+        }
+    });
+
+    // ===== Login modal functions (copy từ trang chủ) =====
+    function handleLoginStep1() {
+        const inputVal = document.getElementById('loginInput').value;
+        if (!inputVal) {
+            alert('Vui lòng nhập tên đăng nhập hoặc số điện thoại!');
+            return;
+        }
+        document.getElementById('loginStep1').style.display = 'none';
+        document.getElementById('loginStep2').style.display = 'block';
+    }
+
+    function backToStep1() {
+        document.getElementById('loginStep1').style.display = 'block';
+        document.getElementById('loginStep2').style.display = 'none';
+    }
+
+    function handleLoginStep2() {
+        const inputVal = document.getElementById('loginInput').value;
+        const password = document.getElementById('loginPassword').value;
+        if (!password) {
+            alert('Vui lòng nhập mật khẩu!');
+            return;
+        }
+        fetch('login.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({ username: inputVal, password: password })
+        })
+        .then(async response => {
+            const raw = await response.text();
+            let data;
+            try { data = raw ? JSON.parse(raw) : {}; } catch (err) { throw new Error('Phản hồi máy chủ không hợp lệ.'); }
+            if (!response.ok || data.status === 'error') {
+                throw new Error(data.message || 'Đăng nhập thất bại.');
+            }
+            return data;
+        })
+        .then(data => {
+            closeLoginForm();
+            if (data.position) {
+                localStorage.setItem('userPosition', data.position);
+            }
+            setTimeout(() => {
+                if (data.redirect) {
+                    if (data.redirect === 'index.html') {
+                        window.location.reload();
+                    } else {
+                        window.location.href = data.redirect;
+                    }
+                } else {
+                    window.location.reload();
+                }
+            }, 300);
+        })
+        .catch(error => {
+            alert('Có lỗi xảy ra khi đăng nhập: ' + error.message);
+        });
+    }
+
+    function handleLogout() {
+        fetch('logout.php', { credentials: 'include' })
+            .then(() => {
+                sessionStorage.removeItem('sessionLoggedIn');
+                localStorage.removeItem('userPosition');
+                window.location.reload();
+            });
+    }
+
+    function showRegisterForm() {
+        document.getElementById('loginStep1').style.display = 'none';
+        document.getElementById('loginStep2').style.display = 'none';
+        document.querySelector('.terms-text').style.display = 'none';
+        document.querySelector('.divider').style.display = 'none';
+        document.querySelector('.social-login').style.display = 'none';
+        document.getElementById('registerStep').style.display = 'block';
+        document.getElementById('registerMessage').innerText = '';
+        document.getElementById('regUsername').value = '';
+        document.getElementById('regPhone').value = '';
+        document.getElementById('regGmail').value = '';
+        document.getElementById('regPass').value = '';
+        if(document.getElementById('regCode')) document.getElementById('regCode').value = '';
+    }
+
+    function backToLogin() {
+        document.getElementById('registerStep').style.display = 'none';
+        document.getElementById('loginStep1').style.display = 'block';
+        document.querySelector('.terms-text').style.display = 'block';
+        document.querySelector('.divider').style.display = 'block';
+        document.querySelector('.social-login').style.display = 'flex';
+    }
+
+    function sendVerificationCode() {
+        const gmail = document.getElementById('regGmail').value;
+        if (!gmail) {
+            alert('Vui lòng nhập email để nhận mã!');
+            return;
+        }
+        const formData = new FormData();
+        formData.append('send', 'true');
+        formData.append('gmail', gmail);
+        fetch('/xacnhangamil.php', { method: 'POST', body: formData })
+            .then(response => response.text())
+            .then(data => { alert(data); })
+            .catch(() => { alert('Có lỗi xảy ra khi gửi mã.'); });
+    }
+
+    function handleRegister() {
+        const user = document.getElementById('regUsername').value;
+        const phone = document.getElementById('regPhone').value;
+        const gmail = document.getElementById('regGmail').value;
+        const pass = document.getElementById('regPass').value;
+        const code = document.getElementById('regCode').value;
+        const msgDiv = document.getElementById('registerMessage');
+        if (!user || !phone || !gmail || !pass || !code) {
+            msgDiv.style.color = 'red';
+            msgDiv.innerText = 'Vui lòng nhập đầy đủ thông tin và mã xác nhận!';
+            return;
+        }
+        const formData = new FormData();
+        formData.append('code', code);
+        fetch('/check_code.php', { method: 'POST', body: formData })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    fetch('/register.php', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ username: user, phone: phone, gmail: gmail, password: pass })
+                    })
+                    .then(response => response.text())
+                    .then(text => {
+                        let regData;
+                        try { regData = JSON.parse(text); } catch (e) { regData = { status: 'error', message: text || 'Có lỗi xảy ra, vui lòng thử lại.' }; }
+                        if (regData.status === 'success') {
+                            msgDiv.style.color = '#4CAF50';
+                            msgDiv.innerText = 'Đăng ký thành công!';
+                        } else {
+                            msgDiv.style.color = 'red';
+                            msgDiv.innerText = regData.message || 'Có lỗi xảy ra, vui lòng thử lại.';
+                        }
+                    })
+                    .catch(() => {
+                        msgDiv.style.color = 'red';
+                        msgDiv.innerText = 'Có lỗi xảy ra, vui lòng thử lại.';
+                    });
+                } else {
+                    msgDiv.style.color = 'red';
+                    msgDiv.innerText = 'Sai mã xác nhận';
+                }
+            })
+            .catch(() => {
+                msgDiv.style.color = 'red';
+                msgDiv.innerText = 'Lỗi kiểm tra mã xác nhận.';
+            });
+    }
+
+    function toggleLoginForm() {
+        document.getElementById('loginModal').style.display = 'block';
+        if (typeof backToLogin === 'function') backToLogin();
+        if (typeof backToStep1 === 'function') backToStep1();
+        if(document.getElementById('loginInput')) document.getElementById('loginInput').value = '';
+        if(document.getElementById('loginPassword')) document.getElementById('loginPassword').value = '';
+    }
+    function closeLoginForm() { document.getElementById('loginModal').style.display = 'none'; }
+    window.onclick = function(event) {
+        var modal = document.getElementById('loginModal');
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    }
+
+    function renderNews(items) {
+        console.log('renderNews được gọi với', items.length, 'item(s)');
+        newsListEl.innerHTML = '';
+        if (!items.length) {
+            newsEmptyEl.style.display = 'block';
+            return;
+        }
+        newsEmptyEl.style.display = 'none';
+        items.forEach((item, index) => {
+            console.log(`Đang render item ${index + 1}:`, item.title);
+            const videoId = item.video_id || extractVideoId(item.youtube_url);
+            
+            // Escape HTML và xử lý xuống dòng trong note
+            const safeTitle = (item.title || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            const safeNote = (item.note || '').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\r\n/g, '<br>').replace(/\n/g, '<br>');
+            const safeCreatedBy = (item.created_by || 'Admin').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            
+            const card = document.createElement('div');
+            card.className = 'news-card';
+            card.innerHTML = `
+                <div class="news-thumb">
+                    <img src="${item.thumbnail || ('https://img.youtube.com/vi/' + videoId + '/hqdefault.jpg')}" alt="${safeTitle}">
+                    <button class="play-overlay" aria-label="Xem video">▶</button>
+                </div>
+                <div class="news-body">
+                    <h3>${safeTitle}</h3>
+                    <div>
+                        <p class="news-note" data-video-id="${videoId}">${safeNote}</p>
+                        <span class="news-note-toggle" data-video-id="${videoId}">Xem thêm</span>
+                    </div>
+                    <div class="news-meta">Đăng bởi ${safeCreatedBy} • ${new Date(item.created_at || Date.now()).toLocaleDateString('vi-VN')}</div>
+                    <div class="news-actions">
+                        <button class="primary-btn" data-watch="${videoId}">Xem nhanh</button>
+                        <a class="secondary-btn" href="https://www.youtube.com/watch?v=${videoId}" target="_blank" rel="noopener">Mở trên YouTube</a>
+                    </div>
+                </div>
+                <div class="news-comments" data-comments="${videoId}">
+                    <h4>Bình luận</h4>
+                    <div class="comment-list"></div>
+                    <form class="comment-form">
+                        <input type="text" name="comment_name" placeholder="Tên của bạn (tuỳ chọn)">
+                        <textarea name="comment_text" rows="2" placeholder="Nhập bình luận..."></textarea>
+                        <button type="submit">Gửi</button>
+                    </form>
+                </div>
+            `;
+            card.querySelector('.play-overlay').addEventListener('click', () => openVideo(videoId));
+            card.querySelector('[data-watch]').addEventListener('click', () => openVideo(videoId));
+            
+            // Toggle note expand/collapse
+            const noteToggle = card.querySelector('.news-note-toggle');
+            const noteEl = card.querySelector('.news-note');
+            if (noteToggle && noteEl) {
+                noteToggle.addEventListener('click', () => {
+                    if (noteEl.classList.contains('expanded')) {
+                        noteEl.classList.remove('expanded');
+                        noteToggle.textContent = 'Xem thêm';
+                    } else {
+                        noteEl.classList.add('expanded');
+                        noteToggle.textContent = 'Thu gọn';
+                    }
+                });
+            }
+            
+            const form = card.querySelector('.comment-form');
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                handleCommentSubmit(videoId, form);
+            });
+            newsListEl.appendChild(card);
+            console.log(`Card ${index + 1} đã được thêm vào DOM`);
+            renderComments(videoId);
+        });
+        console.log('Hoàn tất render tất cả cards');
+    }
+
+    async function loadNews() {
+        try {
+            console.log('Đang tải tin tức...');
+            const res = await fetch('api/news_list.php');
+            console.log('Response status:', res.status);
+            const data = await res.json();
+            console.log('Dữ liệu nhận được:', data);
+            if (data.success) {
+                console.log('Số lượng tin tức:', data.items?.length || 0);
+                renderNews(data.items || []);
+            } else {
+                console.error('API trả về lỗi:', data.error);
+                newsEmptyEl.style.display = 'block';
+                newsEmptyEl.textContent = 'Không tải được tin tức.';
+            }
+        } catch (err) {
+            console.error('Lỗi khi tải tin tức:', err);
+            newsEmptyEl.style.display = 'block';
+            newsEmptyEl.textContent = 'Không tải được tin tức. Lỗi: ' + err.message;
+        }
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeVideoModal();
+    });
+
+    loadNews();
+    </script>
+    <script src="search-suggestions.js"></script>
+</body>
+</html>

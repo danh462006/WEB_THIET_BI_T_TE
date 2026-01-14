@@ -1,0 +1,2397 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Trị Viên - Danh sách sản phẩm</title>
+    <link rel="icon" type="image/png" href="hinh-anh/logo-favicon.png">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="category-style.css">
+    <link rel="stylesheet" href="profile-modal.css">
+    <link rel="stylesheet" href="mobile-responsive.css">
+    <script src="auth-redirect.js"></script>
+        <script src="image-upload-handler.js" defer></script>
+    <style>
+        :root {
+            --bg: #f6f7fb;
+            --card: #ffffff;
+            --border: #e5e7eb;
+            --text: #111827;
+            --muted: #6b7280;
+            --primary: #0d6efd;
+            --accent: #28a745;
+            --danger: #dc3545;
+            --shadow: 0 10px 30px rgba(17, 24, 39, 0.08);
+        }
+
+        * { box-sizing: border-box; }
+        body { margin: 0; font-family: "Segoe UI", Arial, sans-serif; background: var(--bg); color: var(--text); }
+        a { color: inherit; text-decoration: none; }
+
+        .page { display: flex; gap: 16px; padding: 20px; align-items: flex-start; }
+        .filter-panel { width: 25%; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; box-shadow: var(--shadow); position: sticky; top: 12px; max-height: 90vh; overflow-y: auto; transition: transform 0.3s ease; }
+        .filter-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+        .filter-header h3 { margin: 0; font-size: 18px; }
+        .filter-close { display: none; background: none; border: none; font-size: 20px; cursor: pointer; color: var(--muted); }
+
+        .filter-block { margin-bottom: 16px; border-bottom: 1px solid var(--border); padding-bottom: 12px; }
+        .filter-block:last-child { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
+        .filter-block h4 { margin: 0 0 8px 0; font-size: 15px; }
+        .filter-options { display: grid; gap: 6px; grid-template-columns: 1fr; }
+        .filter-option { display: flex; align-items: center; gap: 8px; font-size: 14px; }
+        .filter-option input { accent-color: var(--primary); }
+        .filter-actions { display: flex; gap: 10px; }
+        .btn { border: none; border-radius: 10px; padding: 10px 12px; font-weight: 600; cursor: pointer; font-size: 14px; }
+        .btn-primary { background: var(--primary); color: #fff; }
+        .btn-outline { background: #fff; color: var(--text); border: 1px solid var(--border); }
+
+        .content-area { width: 75%; display: flex; flex-direction: column; gap: 14px; }
+        .content-header { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+        .result-count { font-weight: 700; }
+        .sort-select { padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border); background: #fff; font-size: 14px; }
+        .mobile-filter-toggle { display: none; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border); background: #fff; cursor: pointer; }
+
+        .type-panel { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.04); }
+        .type-panel h3 { margin: 0 0 10px 0; font-size: 16px; }
+        .type-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; }
+        .type-card { background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 10px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
+        .type-card.active { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(13,110,253,0.12); }
+        .type-card span { color: var(--muted); font-size: 13px; }
+
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+        .product-card { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.04); display: flex; flex-direction: column; gap: 8px; transition: transform 0.15s ease, box-shadow 0.15s ease; }
+        .product-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+        .product-card img { width: 100%; height: 150px; object-fit: cover; border-radius: 10px; background: #f3f4f6; }
+        .product-name { font-weight: 700; font-size: 15px; }
+        .product-price { color: #d97706; font-weight: 700; }
+        .product-rating { color: #f59e0b; font-size: 13px; }
+        .product-actions { display: flex; gap: 8px; }
+        .product-actions .btn { flex: 1; padding: 10px; font-size: 13px; }
+
+        .pagination { display: flex; gap: 8px; align-items: center; justify-content: center; padding: 10px 0 20px; flex-wrap: wrap; }
+        .page-btn { padding: 8px 12px; border: 1px solid var(--border); background: #fff; border-radius: 10px; cursor: pointer; min-width: 40px; }
+        .page-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+        .page-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .price-inputs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+        .price-inputs input { padding: 10px; border-radius: 10px; border: 1px solid var(--border); font-size: 14px; }
+
+        .skeleton { position: relative; overflow: hidden; background: #e5e7eb; border-radius: 10px; }
+        .skeleton::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.6) 50%, rgba(255,255,255,0) 100%); animation: shimmer 1.2s infinite; }
+        @keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+
+        .filter-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 900; }
+        .filter-panel.mobile { position: fixed; inset: 0 30% 0 0; max-height: none; z-index: 901; transform: translateX(-100%); }
+        .filter-panel.mobile.open { transform: translateX(0); }
+
+        @media (max-width: 1024px) {
+            .filter-panel { width: 30%; }
+            .content-area { width: 70%; }
+        }
+
+        @media (max-width: 768px) {
+            .page { flex-direction: column; padding: 12px; gap: 12px; }
+            .content-area { width: 100%; }
+            .filter-panel { display: none; }
+            .filter-panel.mobile { display: block; width: 85%; max-width: 320px; }
+            .mobile-filter-toggle { display: inline-flex; align-items: center; gap: 6px; }
+            .filter-close { display: inline-block; }
+            
+            /* Product grid mobile */
+            .product-grid { 
+                grid-template-columns: repeat(2, 1fr); 
+                gap: 10px; 
+            }
+            .product-card { 
+                padding: 10px; 
+            }
+            .product-card img { 
+                height: 120px; 
+            }
+            .product-name { 
+                font-size: 13px; 
+                line-height: 1.3;
+            }
+            .product-price { 
+                font-size: 13px; 
+            }
+            .product-actions { 
+                flex-direction: column; 
+                gap: 6px; 
+            }
+            .product-actions .btn { 
+                padding: 8px; 
+                font-size: 12px; 
+            }
+            
+            /* Type cards mobile */
+            .type-grid { 
+                grid-template-columns: repeat(2, 1fr); 
+                gap: 8px; 
+            }
+            .type-card { 
+                padding: 8px; 
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 4px;
+            }
+            .type-card span { 
+                font-size: 11px; 
+            }
+            
+            /* Header mobile */
+            .content-header { 
+                gap: 8px; 
+            }
+            .result-count { 
+                font-size: 14px; 
+            }
+            .sort-select { 
+                padding: 8px 10px; 
+                font-size: 13px; 
+            }
+            
+            /* Pagination mobile */
+            .pagination { 
+                gap: 6px; 
+                padding: 8px 0 16px; 
+            }
+            .page-btn { 
+                padding: 6px 10px; 
+                min-width: 36px; 
+                font-size: 13px; 
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .page { padding: 8px; }
+            
+            /* Single column on very small screens */
+            .product-grid { 
+                grid-template-columns: 1fr; 
+            }
+            .product-card img { 
+                height: 180px; 
+            }
+            
+            .type-grid { 
+                grid-template-columns: 1fr; 
+            }
+            
+            .form-row { 
+                grid-template-columns: 1fr; 
+            }
+        }
+
+        /* Admin styles (top banner/nav removed as requested) */
+
+        /* Admin category manager */
+        .admin-manage-card {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: var(--shadow);
+        }
+
+        .admin-manage-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 16px;
+        }
+
+        .admin-box-header {
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .admin-inline {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .admin-inline input,
+        .admin-inline select {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        .admin-table th,
+        .admin-table td {
+            padding: 8px;
+            border-bottom: 1px solid var(--border);
+            text-align: left;
+        }
+
+        .admin-table th {
+            background: #f3f4f6;
+        }
+
+        .admin-action-btn {
+            border: 1px solid var(--border);
+            background: #fff;
+            padding: 6px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .admin-action-btn.danger {
+            border-color: #dc3545;
+            color: #dc3545;
+        }
+
+        .admin-note {
+            display: block;
+            margin-top: 8px;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        /* Product Form Modal */
+        .product-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 10000;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .product-modal-content {
+            max-width: 900px;
+            margin: 40px auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            animation: modalSlideIn 0.3s ease-out;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .product-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .product-modal-header h2 {
+            margin: 0;
+            color: #111;
+            font-size: 24px;
+        }
+
+        .product-modal-close {
+            background: none;
+            border: none;
+            font-size: 32px;
+            color: #999;
+            cursor: pointer;
+            padding: 0;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s;
+        }
+
+        .product-modal-close:hover {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px;
+            background: #f0f9ff;
+            border: 2px solid #3b82f6;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .checkbox-group label {
+            margin: 0;
+            font-weight: 600;
+            color: #1e40af;
+            cursor: pointer;
+        }
+
+        .checkbox-help {
+            font-size: 13px;
+            color: #666;
+            margin-top: 8px;
+        }
+
+        .modal-btn-submit {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 14px 32px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .modal-btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(102, 126, 234, 0.5);
+        }
+
+        .modal-btn-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .modal-btn-cancel {
+            background: #e5e7eb;
+            color: #374151;
+            padding: 14px 32px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-left: 12px;
+        }
+
+        .modal-btn-cancel:hover {
+            background: #d1d5db;
+        }
+
+        .status-message {
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .status-message.success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #10b981;
+        }
+
+        .status-message.error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #ef4444;
+        }
+
+        .cache-info {
+            background: #f0f9ff;
+            border-left: 4px solid #3b82f6;
+            padding: 12px;
+            margin-top: 8px;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+
+        /* Image Upload Styles */
+        .image-upload-section {
+            background: #f9fafb;
+            border: 2px dashed #d1d5db;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .image-upload-section h3 {
+            margin: 0 0 16px 0;
+            font-size: 16px;
+            color: #374151;
+        }
+
+        .image-upload-box {
+            position: relative;
+            border: 2px dashed #9ca3af;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .image-upload-box:hover {
+            border-color: #3b82f6;
+            background: #eff6ff;
+        }
+
+        .image-upload-box input[type="file"] {
+            display: none;
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            color: #9ca3af;
+            margin-bottom: 8px;
+        }
+
+        .upload-text {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .upload-text strong {
+            color: #3b82f6;
+        }
+
+        .image-preview-container {
+            margin-top: 16px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 12px;
+        }
+
+        .image-preview-item {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px solid #e5e7eb;
+            background: #f3f4f6;
+        }
+
+        .image-preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .image-preview-item.primary {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+
+        .image-preview-badge {
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            background: #3b82f6;
+            color: white;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .image-preview-remove {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            background: #ef4444;
+            color: white;
+            border: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 16px;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.9;
+            transition: opacity 0.2s;
+        }
+
+        .image-preview-remove:hover {
+            opacity: 1;
+        }
+
+        .image-upload-loading {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: #3b82f6;
+        }
+
+        .add-more-images-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            background: white;
+            border: 2px dashed #3b82f6;
+            color: #3b82f6;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 12px;
+            transition: all 0.3s;
+        }
+
+        .add-more-images-btn:hover {
+            background: #eff6ff;
+        }
+
+        @media (max-width: 768px) {
+            .product-modal {
+                padding: 0;
+            }
+            
+            .product-modal-content {
+                margin: 0;
+                padding: 20px 16px;
+                border-radius: 0;
+                min-height: 100vh;
+            }
+            
+            .product-modal-header h2 {
+                font-size: 20px;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            
+            .form-group {
+                margin-bottom: 16px;
+            }
+            
+            .form-group input,
+            .form-group select,
+            .form-group textarea {
+                padding: 10px;
+                font-size: 16px; /* Prevent zoom on iOS */
+            }
+            
+            .modal-btn-submit,
+            .modal-btn-cancel {
+                width: 100%;
+                padding: 12px 24px;
+                font-size: 15px;
+                margin: 8px 0;
+            }
+            
+            .admin-manage-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .admin-table {
+                font-size: 12px;
+            }
+            
+            .admin-table th,
+            .admin-table td {
+                padding: 6px 4px;
+            }
+            
+            .admin-inline {
+                flex-direction: column;
+                gap: 8px;
+            }
+            
+            .image-upload-section {
+                padding: 16px 12px;
+            }
+            
+            .image-upload-box {
+                padding: 16px 12px;
+            }
+            
+            .uploaded-images-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .product-modal-content {
+                padding: 16px 12px;
+            }
+            
+            .product-modal-header {
+                margin-bottom: 16px;
+                padding-bottom: 12px;
+            }
+            
+            .product-modal-header h2 {
+                font-size: 18px;
+            }
+            
+            .uploaded-images-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .checkbox-group {
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<style>
+/* Admin banner */
+.admin-banner {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 15px 20px;
+    text-align: center;
+    font-weight: bold;
+    position: relative;
+}
+</style>
+<body>
+    <div class="admin-banner">⚙️ QUẢN TRỊ VIÊN - CHỈ DÀNH CHO NHÂN VIÊN Đức Phương</div>
+
+    <header class="header">
+        <div class="container">
+            <div class="logo-section">
+                <img src="hinh-anh/logo.png" alt="TBYT Đức Phương" class="logo">
+            </div>
+            
+            <div class="search-section">
+                <div class="search-box">
+                    <input type="text" placeholder="Tìm Kiếm ..." class="search-input" autocomplete="off">
+                    <button class="search-btn">🔍</button>
+                </div>
+                <div class="search-suggestions" id="searchSuggestions"></div>
+            </div>
+            
+            <div class="user-section">
+                <div class="account-dropdown">
+                    <button class="account-btn" onclick="handleAccountClick(event)">
+                        <img src="hinh-anh/icon_tk.png" alt="Tài khoản" class="account-icon">
+                    </button>
+                    <div id="usernameDisplay" class="username-display" style="display: none;"></div>
+                    <div class="account-menu" id="accountMenu" style="min-width: 150px; right: 0; left: auto;">
+                        <a href="#" onclick="event.stopPropagation(); openProfileModal(); return false;">Thông tin tài khoản</a>
+                        <a href="#">Đơn hàng của tôi</a>
+                        <a href="#" onclick="event.stopPropagation(); handleLogout(); return false;">Đăng xuất</a>
+                    </div>
+                </div>
+                <button class="cart-btn">🛒 Giỏ hàng</button>
+                <div class="dropdown">
+                    <button class="dropdown-btn">📋 Danh mục ▼</button>
+                    <div class="dropdown-content">
+                        <a href="quan-tri-vien-index.html">Trang chủ quản trị</a>
+                        <div class="dropdown-item-with-submenu">
+                            <a href="#" class="has-submenu">Sản phẩm</a>
+                            <div class="submenu">
+                                <div class="submenu-content">
+                                    <div class="category-header">
+                                        <h3>🔥 Gợi ý cho bạn</h3>
+                                    </div>
+                                    
+                                    <div class="category-brands"></div>
+
+                                    <div class="category-main">
+                                        <div class="category-detail" id="categoryDetail">
+                                            <p>Di chuột vào các nhóm sản phẩm ở trên để xem chi tiết</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="quan-tri-vien-thongtin.html">Giới thiệu</a>
+                        <a href="tin-tuc.html">Tin tức - Kiến thức</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+<div class="page">
+    <aside id="filterPanel" class="filter-panel" aria-label="Bộ lọc sản phẩm">
+        <div class="filter-header">
+            <h3>Bộ lọc</h3>
+            <button class="filter-close" aria-label="Đóng bộ lọc">×</button>
+        </div>
+        
+
+        <div class="filter-block" id="groupFilterBlock">
+            <h4>Nhóm sản phẩm</h4>
+            <div class="filter-options" id="groupOptions"></div>
+            <button id="groupMore" class="btn btn-outline" style="margin-top:8px; display:none;">Xem thêm</button>
+        </div>
+
+        <div class="filter-block">
+            <h4>Mức giá</h4>
+            <div class="filter-options" id="priceOptions"></div>
+        </div>
+
+        <div class="filter-block">
+            <h4>Hoặc nhập khoảng giá phù hợp với bạn:</h4>
+            <div class="price-inputs">
+                <input id="minPrice" type="text" placeholder="390.000đ">
+                <input id="maxPrice" type="text" placeholder="63.990.000đ">
+            </div>
+        </div>
+
+        <div class="filter-block" style="margin-bottom:0; border-bottom:none;">
+            <div class="filter-actions">
+                <button id="applyFilters" class="btn btn-primary">Áp dụng bộ lọc</button>
+                <button id="resetFilters" class="btn btn-outline">Đặt lại</button>
+            </div>
+        </div>
+    </aside>
+
+    <div class="filter-overlay" id="filterOverlay"></div>
+
+    <section class="content-area">
+        <div class="content-header">
+            <div class="result-count" id="resultCount">Kết quả tìm kiếm: 0 sản phẩm</div>
+            <select id="sortSelect" class="sort-select">
+                <option value="default">Mặc định</option>
+                <option value="price-asc">Giá thấp đến cao</option>
+                <option value="price-desc">Giá cao đến thấp</option>
+                <option value="newest">Mới nhất</option>
+            </select>
+            <button id="mobileFilterToggle" class="mobile-filter-toggle">Bộ lọc</button>
+        </div>
+
+        <div class="admin-manage-card">
+            <h3 style="margin: 0 0 12px 0;">Quản lý danh mục sản phẩm</h3>
+            <div class="admin-manage-grid">
+                <div class="admin-box">
+                    <div class="admin-box-header">Nhóm sản phẩm</div>
+                    <div class="admin-inline" style="gap:8px; flex-wrap: wrap;">
+                        <input id="newGroupName" type="text" placeholder="Tên nhóm mới (vd: Máy xịt rửa)" aria-label="Tên nhóm mới" style="flex:1; min-width: 220px;">
+                        <input id="newGroupIcon" type="text" placeholder="Tên icon (không cần đường dẫn, không cần .png)" aria-label="Tên icon nhóm" style="flex:1; min-width: 220px;">
+                        <div style="display:flex; gap:6px; align-items:center; flex-wrap: wrap;">
+                            <input id="newGroupIconFile" type="file" accept="image/*" style="display:none;">
+                            <button type="button" id="pickGroupIconBtn" class="btn btn-outline" style="white-space: nowrap;">Chọn icon</button>
+                            <button type="button" id="uploadGroupIconBtn" class="btn btn-primary" style="white-space: nowrap;">Tải icon lên</button>
+                            <input id="groupIconFolder" type="text" value="icon-hinhdanhmuc/" aria-label="Thư mục lưu icon" style="width:170px; display:none;" title="Thư mục lưu icon (kết thúc bằng /)">
+                        </div>
+                        <span id="groupIconStatus" class="admin-note" aria-live="polite"></span>
+                        <button id="addGroupBtn" class="btn btn-primary" style="white-space: nowrap;">Thêm nhóm</button>
+                    </div>
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Nhóm</th>
+                                <th>Loại</th>
+                                <th>Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminGroupTableBody"></tbody>
+                    </table>
+                </div>
+
+                <div class="admin-box">
+                    <div class="admin-box-header">Loại sản phẩm</div>
+                    <div class="admin-inline">
+                        <select id="typeGroupSelect" aria-label="Chọn nhóm"></select>
+                    </div>
+                    <div class="admin-inline">
+                        <input id="newTypeName" type="text" placeholder="Tên loại mới" aria-label="Tên loại mới">
+                        <button id="addTypeBtn" class="btn btn-primary" style="white-space: nowrap;">Thêm loại</button>
+                    </div>
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Loại</th>
+                                <th>Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminTypeTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+            <small class="admin-note">Thao tác lưu tạm trên trình duyệt; cần kết nối API/DB để lưu vĩnh viễn.</small>
+            
+            <!-- Nút thêm sản phẩm -->
+            <div style="margin-top: 20px; text-align: center;">
+                <button id="addProductBtn" class="btn btn-primary" style="padding: 12px 32px; font-size: 16px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; color: white; font-weight: bold; cursor: pointer; border-radius: 8px; box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4); transition: all 0.3s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 16px rgba(102, 126, 234, 0.5)'" onmouseout="this.style.transform=''; this.style.boxShadow='0 4px 12px rgba(102, 126, 234, 0.4)'">
+                    ➕ Thêm sản phẩm mới
+                </button>
+            </div>
+        </div>
+
+        <div id="typePanel" class="type-panel" style="display:none;">
+            <h3>Loại sản phẩm</h3>
+            <div id="typeGrid" class="type-grid"></div>
+        </div>
+
+        <div id="productGrid" class="product-grid"></div>
+
+        <div id="pagination" class="pagination"></div>
+    </section>
+</div>
+
+<!-- Product Form Modal -->
+<div id="productModal" class="product-modal">
+    <div class="product-modal-content">
+        <div class="product-modal-header">
+            <h2 id="productModalTitle">Thêm Sản Phẩm Mới</h2>
+            <button class="product-modal-close" onclick="closeProductModal()">&times;</button>
+        </div>
+
+        <div id="productStatusMessage" class="status-message"></div>
+
+        <form id="productForm">
+            <input type="hidden" id="modalProductId" name="product_id">
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="modalProductName">Tên sản phẩm <span style="color:red;">*</span></label>
+                    <input type="text" id="modalProductName" name="name" required placeholder="VD: Giường bệnh 3 chức năng">
+                </div>
+
+                <div class="form-group">
+                    <label for="modalProductSku">Mã SKU <span style="color:red;">*</span></label>
+                    <input type="text" id="modalProductSku" name="sku" required placeholder="VD: GB-3CN-001">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="modalProductType">Loại sản phẩm <span style="color:red;">*</span></label>
+                <select id="modalProductType" name="type_code" required>
+                    <option value="">-- Chọn loại sản phẩm --</option>
+                </select>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="modalOriginalPrice">Giá gốc (đ) <span style="color:red;">*</span></label>
+                    <input type="number" id="modalOriginalPrice" name="original_price" required min="0" step="1000" placeholder="10000000">
+                </div>
+
+                <div class="form-group">
+                    <label for="modalSalePrice">Giá bán (đ) <span style="color:red;">*</span></label>
+                    <input type="number" id="modalSalePrice" name="sale_price" required min="0" step="1000" placeholder="9000000">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="modalStockQuantity">Số lượng tồn kho</label>
+                <input type="number" id="modalStockQuantity" name="stock_quantity" min="0" value="0">
+            </div>
+
+            <div class="form-group">
+                <label for="modalDescription">Mô tả sản phẩm</label>
+                <textarea id="modalDescription" name="description" placeholder="Nhập mô tả chi tiết về sản phẩm..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="modalTechnicalSpecs">Thông số kỹ thuật</label>
+                <textarea id="modalTechnicalSpecs" name="technical_specs" rows="6" placeholder="Nhập thông số kỹ thuật sản phẩm...
+Ví dụ:
+- Kích thước: 2000 x 900 x 500 mm
+- Trọng lượng: 85kg
+- Chất liệu khung: Thép sơn tĩnh điện
+- Tải trọng: 250kg"></textarea>
+            </div>
+
+            <!-- IMAGE UPLOAD SECTION -->
+            <div class="image-upload-section">
+                <h3>🖼️ Hình ảnh sản phẩm</h3>
+                
+                <!-- Upload hình chính -->
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #374151;">
+                        Hình chính (Thumbnail) <span style="color: #3b82f6;">*</span>
+                    </label>
+                    <div class="image-upload-box" onclick="document.getElementById('thumbnailInput').click()">
+                        <input type="file" id="thumbnailInput" accept="image/*">
+                        <div class="upload-icon">📷</div>
+                        <div class="upload-text">
+                            <strong>Click để chọn hình chính</strong><br>
+                            <small>Khuyến nghị: 800x800px, dưới 2MB</small>
+                        </div>
+                    </div>
+                    <div id="thumbnailPreview" class="image-preview-container"></div>
+                    <input type="hidden" id="thumbnailPath" name="thumbnail_path">
+                </div>
+
+                <!-- Upload hình phụ -->
+                <div>
+                    <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #374151;">
+                        Hình phụ (Gallery) - Tối đa 10 hình
+                    </label>
+                    <div class="image-upload-box" onclick="document.getElementById('galleryInput').click()">
+                        <input type="file" id="galleryInput" accept="image/*" multiple>
+                        <div class="upload-icon">🖼️</div>
+                        <div class="upload-text">
+                            <strong>Click để chọn nhiều hình phụ</strong><br>
+                            <small>Có thể chọn nhiều file cùng lúc (max 10)</small>
+                        </div>
+                    </div>
+                    <div id="galleryPreview" class="image-preview-container"></div>
+                    <input type="hidden" id="galleryPaths" name="gallery_paths">
+                    
+                    <button type="button" class="add-more-images-btn" onclick="document.getElementById('galleryInput').click()" style="display: none;" id="addMoreBtn">
+                        ➕ Thêm hình phụ
+                    </button>
+                </div>
+            </div>
+
+            <!-- CACHE CHECKBOX -->
+            <div class="checkbox-group">
+                <input type="checkbox" id="modalCreateCache" name="create_cache_from_form" value="1" checked>
+                <div>
+                    <label for="modalCreateCache">
+                        ⚡ Tạo cache từ thông tin này (Khuyến nghị)
+                    </label>
+                    <div class="checkbox-help">
+                        Khi bật: User sẽ thấy sản phẩm NGAY LẬP TỨC từ cache (không cần query database). 
+                        Cache sẽ được tự động refresh khi giá/tồn kho thay đổi.
+                    </div>
+                </div>
+            </div>
+
+            <div id="modalCacheInfo" class="cache-info">
+                <strong>📊 Thông tin cache:</strong>
+                <ul style="margin: 8px 0 0 20px; padding: 0;">
+                    <li>Cache basic: TTL = 1 giờ (3600 giây)</li>
+                    <li>Cache full: TTL = 5 phút (300 giây)</li>
+                    <li>Auto-refresh khi giá/stock thay đổi</li>
+                </ul>
+            </div>
+
+            <div style="margin-top: 30px;">
+                <button type="submit" class="modal-btn-submit" id="modalSubmitBtn">
+                    💾 Lưu sản phẩm
+                </button>
+                <button type="button" class="modal-btn-cancel" onclick="closeProductModal()">
+                    ❌ Hủy
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+// Helper function for Vietnamese text normalization
+function removeVietnameseTones(str) {
+    if (!str) return '';
+    str = str.toLowerCase();
+    str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, 'a');
+    str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, 'e');
+    str = str.replace(/ì|í|ị|ỉ|ĩ/g, 'i');
+    str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, 'o');
+    str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, 'u');
+    str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, 'y');
+    str = str.replace(/đ/g, 'd');
+    return str;
+}
+
+(async function(){
+    const categoryData = {
+        "Giường": ["Giường bệnh cơ bản", "Giường chuyên dụng (ICU, sản khoa)", "Giường điều chỉnh độ cao/ tư thế (giường điện)", "Giường chăm sóc tại nhà"],
+        "Xe lăn": ["Xe lăn tay (người dùng tự đẩy)", "Xe lăn đẩy sau (người chăm sóc đẩy)", "Xe lăn điện", "Xe lăn thể thao", "Xe lăn gấp gọn/ di chuyển", "Xe lăn lên xuống cầu thang"],
+        "Xe Scooter điện": ["Loại di chuyển trong nhà/ đường bằng phẳng", "Loại địa hình (bánh lớn, đi đường dài)", "Loại gấp gọn/ tháo rời"],
+        "Băng ca": ["Băng ca cấp cứu (cố định)", "Băng ca đẩy (có bánh xe)", "Băng ca gấp (vận chuyển)", "Băng ca chuyên dụng (chống sốc, chụp X-Quang)", "Đệm vận chuyển"],
+        "Tủ": ["Tủ đựng thuốc", "Tủ đựng hồ sơ bệnh án", "Tủ trưng bày/ lưu trữ dụng cụ", "Tủ đầu giường bệnh"],
+        "Máy tạo oxy": ["Máy tạo oxy tại nhà (loại lớn)", "Máy tạo oxy xách tay/ di động", "Máy tạo oxy dòng cao (cho trị liệu đặc biệt)"],
+        "Máy đo": ["Máy đo huyết áp", "Máy đo đường huyết", "Máy đo nồng độ oxy trong máu (SpO2)", "Máy đo thân nhiệt", "Máy đo tim (ECG di động)", "Cân sức khỏe (cơ/ điện tử)"],
+        "Máy xông": ["Máy xông khí dung kiểu nén", "Máy xông siêu âm", "Máy xông màng (mesh)"],
+        "Máy hút dịch": ["Máy hút dịch để bàn/ cố định", "Máy hút dịch xách tay/ di động"],
+        "Máy massage": ["Máy massage cầm tay (giảm đau cơ)", "Đai/ ghế massage toàn thân", "Máy massage chân (xoa bóp, lưu thông máu)", "Thiết bị massage trị liệu"],
+        "Thiết bị tập": ["Thiết bị tập vận động thụ động (CPM)", "Thiết bị tập đi/ thăng bằng", "Thiết bị tập phục hồi chức năng tay/ chân", "Máy tập thể dục chuyên biệt", "Dụng cụ tập trị liệu"],
+        "Nệm": ["Nệm chống loét (hơi, xốp, gel)", "Nệm bệnh viện tiêu chuẩn", "Nệm nâng đỡ cơ thể"],
+        "Dụng cụ hỗ trợ": ["Hỗ trợ di chuyển", "Hỗ trợ vệ sinh", "Hỗ trợ tắm", "Hỗ trợ mặc quần áo", "Hỗ trợ ăn uống"],
+        "Thiết bị y tế khác": ["Đèn khám bệnh", "Máy khử rung tim (AED)", "Bơm tiêm điện", "Hộp đựng dụng cụ vô trùng"]
+    };
+    window.categoryData = categoryData;
+
+    let categoryIcons = {
+        'Giường': 'icon-hinhdanhmuc/nhom-giuong.png',
+        'Xe lăn': 'icon-hinhdanhmuc/nhom-xelan.png',
+        'Xe Scooter điện': 'icon-hinhdanhmuc/nhom-xedien.png',
+        'Băng ca': 'icon-hinhdanhmuc/nhom-bangca.png',
+        'Tủ': 'icon-hinhdanhmuc/nhom-tu.png',
+        'Máy tạo oxy': 'icon-hinhdanhmuc/nhom-maytaooxy.png',
+        'Máy đo': 'icon-hinhdanhmuc/nhom-maydo.png',
+        'Máy xông': 'icon-hinhdanhmuc/nhom-xong.png',
+        'Máy hút dịch': 'icon-hinhdanhmuc/nhom-mayhutdich.png',
+        'Máy massage': 'icon-hinhdanhmuc/nhom-massage.png',
+        'Thiết bị tập': 'icon-hinhdanhmuc/nhom-maytap.png',
+        'Nệm': 'icon-hinhdanhmuc/nhom-nem.png',
+        'Dụng cụ hỗ trợ': 'icon-hinhdanhmuc/nhom-dungcuhotro.png',
+        'Thiết bị y tế khác': 'icon-hinhdanhmuc/nhom-thietbiyte.png'
+    };
+    window.categoryIcons = categoryIcons;
+
+    const CATEGORY_STORAGE_KEY = 'dp_admin_categoryData_v1';
+    const ICON_STORAGE_KEY = 'dp_admin_categoryIcons_v1';
+    const ICON_FOLDER = 'icon-hinhdanhmuc/';
+
+    function buildIconPath(rawName){
+        const base = (rawName || '').trim().replace(/^\/+|\/+$/g, '');
+        if (!base) return '';
+        const noExt = base.replace(/\.[^.]+$/, '');
+        return ICON_FOLDER + noExt + '.png';
+    }
+
+    function loadCategoriesFromStorage() {
+        try {
+            const storedDataRaw = localStorage.getItem(CATEGORY_STORAGE_KEY);
+            if (storedDataRaw) {
+                const storedData = JSON.parse(storedDataRaw);
+                if (storedData && typeof storedData === 'object') {
+                    Object.keys(storedData).forEach(key => {
+                        categoryData[key] = storedData[key];
+                    });
+                }
+            }
+
+            const storedIconsRaw = localStorage.getItem(ICON_STORAGE_KEY);
+            if (storedIconsRaw) {
+                const storedIcons = JSON.parse(storedIconsRaw);
+                if (storedIcons && typeof storedIcons === 'object') {
+                    Object.keys(storedIcons).forEach(key => {
+                        categoryIcons[key] = storedIcons[key];
+                    });
+                }
+            }
+        } catch (e) {
+            console.error('Không thể tải nhóm/loại từ bộ nhớ trình duyệt', e);
+        }
+    }
+
+    function saveCategoriesToStorage() {
+        try {
+            localStorage.setItem(CATEGORY_STORAGE_KEY, JSON.stringify(categoryData));
+            localStorage.setItem(ICON_STORAGE_KEY, JSON.stringify(categoryIcons));
+        } catch (e) {
+            console.error('Không thể lưu nhóm/loại vào bộ nhớ trình duyệt', e);
+        }
+    }
+
+    // Áp dụng dữ liệu đã lưu (nếu có) trước khi render UI
+    loadCategoriesFromStorage();
+
+    // Placeholder data; add your product list here.
+    let sampleProducts = [];
+
+    async function loadProductsFromApi(){
+        try {
+            renderSkeleton(Math.min(state.pageSize, 6));
+            const res = await fetch('api/admin_product_list.php');
+            const out = await res.json();
+            if (!out.success) throw new Error((out.error || 'API error') + (out.detail ? ' - ' + out.detail : ''));
+            if (!out.data || !out.data.length) {
+                productGridEl.innerHTML = '<div style="padding:20px; text-align:center; color:#b45309;">API trả về 0 sản phẩm. Kiểm tra bảng products hoặc quyền truy cập DB.</div>';
+                return;
+            }
+            sampleProducts = (out.data || []).map(p => ({
+                id: p.id,
+                name: p.name,
+                sku: p.sku,
+                price: Number(p.sale_price || p.original_price || 0),
+                sale_price: p.sale_price,
+                original_price: p.original_price,
+                thumbnail_path: p.thumbnail_path,
+                slug: p.slug,
+                group: p.group || p.group_name || p.category || '',
+                type: p.type || p.type_name || p.subcategory || ''
+            }));
+            console.log('Loaded', sampleProducts.length, 'products. First 3:', sampleProducts.slice(0, 3));
+            console.log('Current state:', state);
+            
+            if (sampleProducts.length === 0) {
+                productGridEl.innerHTML = '<div style="padding:20px; text-align:center; color:#dc2626;">API trả về danh sách rỗng. Vui lòng thêm sản phẩm vào cơ sở dữ liệu.</div>';
+                return;
+            }
+            
+            // Gọi render trực tiếp thay vì scheduleRender để tránh delay
+            render();
+        } catch (err) {
+            productGridEl.innerHTML = `<div style="padding:20px; text-align:center; color:#b91c1c;">Không tải được danh sách sản phẩm từ server. ${err.message || ''}</div>`;
+            console.error(err);
+        }
+    }
+
+    const priceRanges = [
+        { id: "all", label: "Tất cả", test: () => true },
+        { id: "lt2", label: "Dưới 2 triệu", test: p => p < 2000000 },
+        { id: "2to4", label: "Từ 2 - 4 triệu", test: p => p >= 2000000 && p < 4000000 },
+        { id: "4to7", label: "Từ 4 - 7 triệu", test: p => p >= 4000000 && p < 7000000 },
+        { id: "7to13", label: "Từ 7 - 13 triệu", test: p => p >= 7000000 && p < 13000000 },
+        { id: "13to20", label: "Từ 13 - 20 triệu", test: p => p >= 13000000 && p < 20000000 },
+        { id: "gt20", label: "Trên 20 triệu", test: p => p >= 20000000 }
+    ];
+
+    const state = {
+        groups: [],
+        types: [],
+        priceRange: "all",
+        min: "",
+        max: "",
+        sort: "default",
+        page: 1,
+        pageSize: 9,
+        showGroupLimit: 14
+    };
+
+    const groupOptionsEl = document.getElementById("groupOptions");
+    const priceOptionsEl = document.getElementById("priceOptions");
+    const resultCountEl = document.getElementById("resultCount");
+    const productGridEl = document.getElementById("productGrid");
+    const paginationEl = document.getElementById("pagination");
+    const typePanelEl = document.getElementById("typePanel");
+    const typeGridEl = document.getElementById("typeGrid");
+    const minPriceEl = document.getElementById("minPrice");
+    const maxPriceEl = document.getElementById("maxPrice");
+    const sortSelect = document.getElementById("sortSelect");
+    const filterPanel = document.getElementById("filterPanel");
+    const filterOverlay = document.getElementById("filterOverlay");
+    const mobileToggle = document.getElementById("mobileFilterToggle");
+    const filterCloseBtn = document.querySelector(".filter-close");
+    const groupMoreBtn = document.getElementById("groupMore");
+    const adminGroupTableBody = document.getElementById("adminGroupTableBody");
+    const adminTypeTableBody = document.getElementById("adminTypeTableBody");
+    const typeGroupSelect = document.getElementById("typeGroupSelect");
+    const addGroupBtn = document.getElementById("addGroupBtn");
+    const addTypeBtn = document.getElementById("addTypeBtn");
+    const newGroupNameInput = document.getElementById("newGroupName");
+    const newGroupIconInput = document.getElementById("newGroupIcon");
+    const newGroupIconFile = document.getElementById("newGroupIconFile");
+    const pickGroupIconBtn = document.getElementById("pickGroupIconBtn");
+    const uploadGroupIconBtn = document.getElementById("uploadGroupIconBtn");
+    const groupIconFolderInput = document.getElementById("groupIconFolder");
+    const groupIconStatus = document.getElementById("groupIconStatus");
+    const newTypeNameInput = document.getElementById("newTypeName");
+
+    let adminSelectedGroup = null;
+    let groupFiltersInitialized = false;
+
+    function formatCurrency(val){
+        if (!Number.isFinite(val)) return "-";
+        return val.toLocaleString('vi-VN', { style: 'currency', currency: 'VND', maximumFractionDigits: 0 });
+    }
+
+    function parseCurrency(str){
+        if (!str) return "";
+        return parseInt(String(str).replace(/[^0-9]/g, ""), 10) || "";
+    }
+
+    function renderPriceOptions(){
+        priceRanges.forEach(range => {
+            const label = document.createElement('label');
+            label.className = 'filter-option';
+            label.innerHTML = `<input type="radio" name="priceRange" value="${range.id}"> ${range.label}`;
+            priceOptionsEl.appendChild(label);
+        });
+        priceOptionsEl.querySelector('input[value="all"]').checked = true;
+        priceOptionsEl.addEventListener('change', (e)=>{
+            if (e.target.name === 'priceRange') {
+                state.priceRange = e.target.value;
+                state.page = 1;
+                syncUrl();
+                scheduleRender();
+            }
+        });
+    }
+
+    function renderGroupFilters(){
+        const groups = Object.keys(categoryData);
+        groupOptionsEl.innerHTML = '';
+        groups.slice(0, state.showGroupLimit).forEach(g => {
+            const label = document.createElement('label');
+            label.className = 'filter-option';
+            label.innerHTML = `<input type="checkbox" value="${g}"> ${g}`;
+            groupOptionsEl.appendChild(label);
+        });
+        groupMoreBtn.style.display = groups.length > state.showGroupLimit ? 'inline-block' : 'none';
+
+        if (!groupFiltersInitialized) {
+            groupOptionsEl.addEventListener('change', (e)=>{
+                if (e.target.type === 'checkbox') {
+                    const val = e.target.value;
+                    if (e.target.checked) { state.groups.push(val); }
+                    else { state.groups = state.groups.filter(g => g !== val); }
+                    state.types = [];
+                    state.page = 1;
+                    syncUrl();
+                    scheduleRender();
+                }
+            });
+
+            groupMoreBtn.addEventListener('click', ()=>{
+                state.showGroupLimit = groups.length;
+                renderGroupFilters();
+            });
+            groupFiltersInitialized = true;
+        }
+    }
+
+    function renderAdminGroupTable(){
+        const groups = Object.keys(categoryData);
+        adminGroupTableBody.innerHTML = '';
+        groups.forEach(groupName => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${groupName}</td>
+                <td>${(categoryData[groupName] || []).length}</td>
+                <td><button class="admin-action-btn danger admin-del-group" data-group="${groupName}">Xóa</button></td>
+            `;
+            adminGroupTableBody.appendChild(tr);
+        });
+    }
+
+    function renderAdminTypeTable(){
+        const groups = Object.keys(categoryData);
+        if (!adminSelectedGroup || !groups.includes(adminSelectedGroup)) {
+            adminSelectedGroup = groups[0] || '';
+        }
+
+        typeGroupSelect.innerHTML = '';
+        groups.forEach(g => {
+            const opt = document.createElement('option');
+            opt.value = g;
+            opt.textContent = g;
+            if (g === adminSelectedGroup) opt.selected = true;
+            typeGroupSelect.appendChild(opt);
+        });
+
+        adminTypeTableBody.innerHTML = '';
+        const list = adminSelectedGroup ? (categoryData[adminSelectedGroup] || []) : [];
+        list.forEach(typeName => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${typeName}</td>
+                <td><button class="admin-action-btn danger admin-del-type" data-type="${typeName}">Xóa</button></td>
+            `;
+            adminTypeTableBody.appendChild(tr);
+        });
+    }
+
+    function refreshAfterCategoryChange(){
+        renderGroupFilters();
+        applyStateToControls();
+        renderTypeGrid(filterList(true));
+        scheduleRender();
+        renderAdminGroupTable();
+        renderAdminTypeTable();
+        // Update header suggestion menu (desktop)
+        renderHeaderGroups();
+    }
+
+    function renderTypeGrid(filtered){
+        if (!state.groups.length) {
+            typePanelEl.style.display = 'none';
+            typeGridEl.innerHTML = '';
+            return;
+        }
+        typePanelEl.style.display = 'block';
+        const baseList = filterList(false); // ignore type filter for counts/all
+        const groupTypes = state.groups.flatMap(g => (categoryData[g]||[]));
+        const counts = groupTypes.reduce((acc, t)=>{ acc[t] = baseList.filter(p=>p.type===t).length; return acc; }, {});
+        typeGridEl.innerHTML = '';
+
+        // "Tất cả" card
+        const allCard = document.createElement('div');
+        const allActive = state.types.length === 0;
+        allCard.className = 'type-card' + (allActive ? ' active' : '');
+        allCard.innerHTML = `<div>Tất cả</div><span>${baseList.length} sp</span>`;
+        allCard.addEventListener('click', () => {
+            state.types = [];
+            state.page = 1;
+            syncUrl();
+            scheduleRender();
+        });
+        typeGridEl.appendChild(allCard);
+
+        groupTypes.forEach(t => {
+            const card = document.createElement('div');
+            const isActive = state.types.includes(t);
+            card.className = 'type-card' + (isActive ? ' active' : '');
+            card.innerHTML = `<div>${t}</div><span>${counts[t] || 0} sp</span>`;
+            card.addEventListener('click', () => {
+                if (isActive) {
+                    state.types = state.types.filter(x => x !== t);
+                } else {
+                    state.types.push(t);
+                }
+                state.page = 1;
+                syncUrl();
+                scheduleRender();
+            });
+            typeGridEl.appendChild(card);
+        });
+    }
+
+    function renderProducts(list){
+        productGridEl.innerHTML = '';
+        if (!list.length) {
+            const empty = document.createElement('div');
+            empty.style.padding = '20px';
+            empty.style.textAlign = 'center';
+            empty.style.color = 'var(--muted)';
+            empty.textContent = 'Chưa có sản phẩm khớp bộ lọc. Thử đặt lại bộ lọc.';
+            productGridEl.appendChild(empty);
+            return;
+        }
+
+        list.forEach(p => {
+            const card = document.createElement('div');
+            card.className = 'product-card';
+            const priceVal = Number.isFinite(p.price) ? p.price : (Number.isFinite(p.sale_price) ? p.sale_price : (Number.isFinite(p.original_price) ? p.original_price : 0));
+            const imgSrc = p.thumbnail_path || p.image || 'https://via.placeholder.com/300x200?text=Product';
+            card.innerHTML = `
+                <img src="${imgSrc}" alt="${p.name || ''}">
+                <div class="product-name">${p.name || 'Tên sản phẩm'}</div>
+                <div class="product-price">${priceVal ? formatCurrency(priceVal) : 'Đang cập nhật'}</div>
+                <div class="product-actions">
+                    <button class="btn btn-outline" data-product-id="${p.id || ''}">Chi tiết</button>
+                    <button class="btn btn-primary" data-edit-id="${p.id || ''}">Sửa</button>
+                </div>
+            `;
+            productGridEl.appendChild(card);
+        });
+    }
+
+    function renderSkeleton(count){
+        productGridEl.innerHTML = '';
+        for (let i=0; i<count; i++){
+            const card = document.createElement('div');
+            card.className = 'product-card';
+            card.innerHTML = `
+                <div class="skeleton" style="height:150px;"></div>
+                <div class="skeleton" style="height:16px; width:80%;"></div>
+                <div class="skeleton" style="height:16px; width:50%;"></div>
+                <div class="skeleton" style="height:14px; width:40%;"></div>
+                <div style="display:flex; gap:8px;">
+                    <div class="skeleton" style="height:38px; flex:1;"></div>
+                    <div class="skeleton" style="height:38px; flex:1;"></div>
+                </div>
+            `;
+            productGridEl.appendChild(card);
+        }
+    }
+
+    function renderPagination(total){
+        const totalPages = Math.max(1, Math.ceil(total / state.pageSize));
+        state.page = Math.min(state.page, totalPages);
+        paginationEl.innerHTML = '';
+        const prev = document.createElement('button');
+        prev.className = 'page-btn';
+        prev.textContent = 'Prev';
+        prev.disabled = state.page === 1;
+        prev.onclick = () => { state.page--; syncUrl(); scheduleRender(); };
+        paginationEl.appendChild(prev);
+
+        for (let i=1; i<=totalPages; i++){
+            const btn = document.createElement('button');
+            btn.className = 'page-btn' + (i===state.page ? ' active' : '');
+            btn.textContent = i;
+            btn.onclick = ()=>{ state.page = i; syncUrl(); scheduleRender(); };
+            paginationEl.appendChild(btn);
+        }
+
+        const next = document.createElement('button');
+        next.className = 'page-btn';
+        next.textContent = 'Next';
+        next.disabled = state.page === totalPages;
+        next.onclick = () => { state.page++; syncUrl(); scheduleRender(); };
+        paginationEl.appendChild(next);
+    }
+
+    function applyFilters(){
+        const min = parseCurrency(minPriceEl.value);
+        const max = parseCurrency(maxPriceEl.value);
+        state.min = min === "" ? "" : min;
+        state.max = max === "" ? "" : max;
+        state.page = 1;
+        syncUrl();
+        scheduleRender();
+    }
+
+    function resetFilters(){
+        state.groups = [];
+        state.types = [];
+        state.priceRange = 'all';
+        state.min = '';
+        state.max = '';
+        state.sort = 'default';
+        state.page = 1;
+        state.showGroupLimit = 14;
+        minPriceEl.value = '';
+        maxPriceEl.value = '';
+        sortSelect.value = 'default';
+        syncUrl();
+        renderGroupFilters();
+        renderPriceOptions();
+        scheduleRender();
+    }
+
+    const normalize = (str) => removeVietnameseTones((str || '').trim()).toLowerCase();
+
+    function filterList(includeTypes = true){
+        let list = sampleProducts.slice();
+
+        if (state.groups.length) {
+            const targetGroups = state.groups.map(normalize);
+            list = list.filter(p => p.group && targetGroups.includes(normalize(p.group)));
+        }
+        if (includeTypes && state.types.length) {
+            const targetTypes = state.types.map(normalize);
+            list = list.filter(p => p.type && targetTypes.includes(normalize(p.type)));
+        }
+        const selectedRange = priceRanges.find(r => r.id === state.priceRange) || priceRanges[0];
+        list = list.filter(p => selectedRange.test(p.price));
+        if (state.min !== '') list = list.filter(p => p.price >= state.min);
+        if (state.max !== '') list = list.filter(p => p.price <= state.max);
+
+        switch(state.sort){
+            case 'price-asc': list.sort((a,b)=>a.price-b.price); break;
+            case 'price-desc': list.sort((a,b)=>b.price-a.price); break;
+            case 'newest': list.sort((a,b)=>b.id-a.id); break;
+            default: break;
+        }
+        return list;
+    }
+
+    let renderTimer = null;
+    function scheduleRender(){
+        if (renderTimer) clearTimeout(renderTimer);
+        renderSkeleton(Math.min(state.pageSize, 6));
+        renderTimer = setTimeout(render, 450);
+    }
+
+    function render(){
+        console.log('Rendering with', sampleProducts.length, 'total products');
+        let filtered = filterList(true);
+        console.log('After filter:', filtered.length, 'products');
+        // Nếu bộ lọc nhóm/loại làm trống danh sách, tự gỡ lọc và hiển thị toàn bộ để tránh hiểu lầm
+        if (!filtered.length && sampleProducts.length && (state.groups.length || state.types.length)) {
+            console.warn('Filters yielded no products. Clearing group/type filters.');
+            state.groups = [];
+            state.types = [];
+            syncUrl();
+            applyStateToControls();
+            filtered = filterList(true);
+            console.log('After clearing filters:', filtered.length, 'products');
+        }
+        resultCountEl.textContent = `Kết quả tìm kiếm: ${filtered.length} sản phẩm`;
+        renderTypeGrid(filtered);
+
+        const start = (state.page -1) * state.pageSize;
+        const pageItems = filtered.slice(start, start + state.pageSize);
+        renderProducts(pageItems);
+        renderPagination(filtered.length);
+    }
+
+    function setGroupFilterFromMenu(categoryName){
+        if (!categoryName) return;
+        state.groups = [categoryName];
+        state.types = [];
+        state.page = 1;
+        syncUrl();
+        applyStateToControls();
+        renderTypeGrid(filterList(true));
+        scheduleRender();
+    }
+
+    function syncUrl(){
+        const params = new URLSearchParams();
+        if (state.groups.length) params.set('groups', state.groups.join(','));
+        if (state.types.length) params.set('types', state.types.join(','));
+        if (state.priceRange && state.priceRange !== 'all') params.set('range', state.priceRange);
+        if (state.min !== '') params.set('min', state.min);
+        if (state.max !== '') params.set('max', state.max);
+        if (state.sort && state.sort !== 'default') params.set('sort', state.sort);
+        if (state.page > 1) params.set('page', state.page);
+        const qs = params.toString();
+        const newUrl = qs ? `${location.pathname}?${qs}` : location.pathname;
+        window.history.replaceState({}, '', newUrl);
+    }
+
+    function restoreFromUrl(){
+        const params = new URLSearchParams(window.location.search);
+        const groups = (params.get('groups')||'').split(',').filter(Boolean);
+        const types = (params.get('types')||'').split(',').filter(Boolean);
+        const range = params.get('range') || 'all';
+        const min = params.get('min') ? parseInt(params.get('min'),10) : '';
+        const max = params.get('max') ? parseInt(params.get('max'),10) : '';
+        const sort = params.get('sort') || 'default';
+        const page = params.get('page') ? parseInt(params.get('page'),10) : 1;
+
+        state.groups = groups;
+        state.types = types;
+        state.priceRange = range;
+        state.min = Number.isFinite(min) ? min : '';
+        state.max = Number.isFinite(max) ? max : '';
+        state.sort = sort;
+        state.page = Number.isFinite(page) ? page : 1;
+    }
+
+    function bindInputs(){
+        document.getElementById('applyFilters').onclick = applyFilters;
+        document.getElementById('resetFilters').onclick = resetFilters;
+        sortSelect.onchange = () => { state.sort = sortSelect.value; state.page = 1; syncUrl(); scheduleRender(); };
+        [minPriceEl, maxPriceEl].forEach(el => {
+            el.addEventListener('input', ()=>{
+                const pos = el.selectionStart;
+                const val = parseCurrency(el.value);
+                el.value = val === '' ? '' : formatCurrency(val);
+                el.selectionStart = el.selectionEnd = pos;
+            });
+        });
+    }
+
+    function applyStateToControls(){
+        // Groups
+        const groupCheckboxes = groupOptionsEl.querySelectorAll('input[type="checkbox"]');
+        groupCheckboxes.forEach(cb => cb.checked = state.groups.includes(cb.value));
+        // Price range
+        const priceRadio = priceOptionsEl.querySelector(`input[value="${state.priceRange}"]`);
+        if (priceRadio) priceRadio.checked = true; else priceOptionsEl.querySelector('input[value="all"]').checked = true;
+        // Min/Max
+        minPriceEl.value = state.min === '' ? '' : formatCurrency(state.min);
+        maxPriceEl.value = state.max === '' ? '' : formatCurrency(state.max);
+        sortSelect.value = state.sort;
+    }
+
+    function setupMobileFilter(){
+        const isMobile = window.matchMedia('(max-width: 768px)').matches;
+        if (isMobile) {
+            filterPanel.classList.add('mobile');
+        } else {
+            filterPanel.classList.remove('mobile');
+            filterPanel.style.transform = '';
+            filterOverlay.style.display = 'none';
+        }
+    }
+
+    // Actions in product grid
+    if (productGridEl) {
+        productGridEl.addEventListener('click', (e)=>{
+            const editBtn = e.target.closest('[data-edit-id]');
+            if (editBtn && editBtn.dataset.editId) {
+                openProductModal(editBtn.dataset.editId);
+                return;
+            }
+            const viewBtn = e.target.closest('[data-product-id]');
+            if (viewBtn && viewBtn.dataset.productId) {
+                const pid = viewBtn.dataset.productId;
+                const prod = sampleProducts.find(p => String(p.id) === String(pid));
+                const slug = prod && prod.slug ? prod.slug : '';
+                const url = slug ? `san-pham/${slug}-${pid}` : `san-pham.php?id=${pid}`;
+                window.location.href = url;
+            }
+        });
+    }
+
+    function openMobileFilter(){
+        if (!filterPanel.classList.contains('mobile')) return;
+        filterPanel.classList.add('open');
+        filterOverlay.style.display = 'block';
+    }
+
+    function closeMobileFilter(){
+        if (!filterPanel.classList.contains('mobile')) return;
+        filterPanel.classList.remove('open');
+        filterOverlay.style.display = 'none';
+    }
+
+    window.addEventListener('resize', setupMobileFilter);
+    mobileToggle.addEventListener('click', openMobileFilter);
+    filterCloseBtn.addEventListener('click', closeMobileFilter);
+    filterOverlay.addEventListener('click', closeMobileFilter);
+
+    // Admin: add group
+    if (addGroupBtn) {
+        addGroupBtn.addEventListener('click', ()=>{
+            const name = (newGroupNameInput.value || '').trim();
+            const iconPath = buildIconPath(newGroupIconInput && newGroupIconInput.value);
+            if (!name) return alert('Vui lòng nhập tên nhóm');
+            if (categoryData[name]) return alert('Nhóm đã tồn tại');
+            categoryData[name] = [];
+            if (iconPath) {
+                categoryIcons[name] = iconPath;
+            }
+            adminSelectedGroup = name;
+            newGroupNameInput.value = '';
+            if (newGroupIconInput) newGroupIconInput.value = '';
+            saveCategoriesToStorage();
+            refreshAfterCategoryChange();
+        });
+    }
+
+    // Admin: pick icon file
+    if (pickGroupIconBtn && newGroupIconFile) {
+        pickGroupIconBtn.addEventListener('click', () => {
+            newGroupIconFile.click();
+        });
+    }
+
+    // Admin: upload icon file
+    if (uploadGroupIconBtn && newGroupIconFile) {
+        uploadGroupIconBtn.addEventListener('click', async () => {
+            if (!newGroupIconFile.files || !newGroupIconFile.files[0]) {
+                alert('Vui lòng chọn file icon trước');
+                return;
+            }
+            const folder = ICON_FOLDER;
+            const baseNameRaw = (newGroupIconInput && newGroupIconInput.value.trim()) || '';
+            const fileName = (() => {
+                if (baseNameRaw) return buildIconPath(baseNameRaw).replace(folder, '');
+                const original = newGroupIconFile.files[0].name || 'icon';
+                const noExt = original.replace(/\.[^.]+$/, '');
+                return noExt + '.png';
+            })();
+
+            const formData = new FormData();
+            formData.append('image', newGroupIconFile.files[0]);
+            formData.append('folderPath', folder);
+            formData.append('fileName', fileName);
+
+            groupIconStatus && (groupIconStatus.textContent = 'Đang tải icon...');
+            uploadGroupIconBtn.disabled = true;
+            try {
+                const res = await fetch('/upload_image.php', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await res.json();
+                if (data.status === 'success' && data.path) {
+                    if (newGroupIconInput) {
+                        const baseFromPath = (data.path || '').replace(folder, '').replace(/\.[^.]+$/, '');
+                        newGroupIconInput.value = baseFromPath;
+                    }
+                    groupIconStatus && (groupIconStatus.textContent = 'Tải icon thành công: ' + data.path);
+                } else {
+                    groupIconStatus && (groupIconStatus.textContent = 'Lỗi tải icon: ' + (data.message || '')); 
+                    alert(data.message || 'Tải icon thất bại');
+                }
+            } catch (err) {
+                console.error(err);
+                groupIconStatus && (groupIconStatus.textContent = 'Lỗi tải icon');
+                alert('Không thể tải icon. Vui lòng thử lại.');
+            } finally {
+                uploadGroupIconBtn.disabled = false;
+            }
+        });
+    }
+
+    // Admin: change selected group for types
+    if (typeGroupSelect) {
+        typeGroupSelect.addEventListener('change', ()=>{
+            adminSelectedGroup = typeGroupSelect.value;
+            renderAdminTypeTable();
+        });
+    }
+
+    // Admin: add type
+    if (addTypeBtn) {
+        addTypeBtn.addEventListener('click', ()=>{
+            const typeName = (newTypeNameInput.value || '').trim();
+            const groupName = typeGroupSelect.value;
+            if (!groupName) return alert('Chưa có nhóm để thêm loại');
+            if (!typeName) return alert('Vui lòng nhập tên loại');
+            const list = categoryData[groupName] || [];
+            if (list.includes(typeName)) return alert('Loại đã tồn tại trong nhóm');
+            list.push(typeName);
+            categoryData[groupName] = list;
+            newTypeNameInput.value = '';
+            saveCategoriesToStorage();
+            refreshAfterCategoryChange();
+        });
+    }
+
+    // Admin: delete group (delegation)
+    if (adminGroupTableBody) {
+        adminGroupTableBody.addEventListener('click', (e)=>{
+            const btn = e.target.closest('.admin-del-group');
+            if (!btn) return;
+            const groupName = btn.getAttribute('data-group');
+            if (!groupName) return;
+            if (!confirm(`Xóa nhóm "${groupName}"?`)) return;
+            delete categoryData[groupName];
+            delete categoryIcons[groupName];
+            state.groups = state.groups.filter(g => g !== groupName);
+            state.types = [];
+            adminSelectedGroup = Object.keys(categoryData)[0] || '';
+            saveCategoriesToStorage();
+            refreshAfterCategoryChange();
+        });
+    }
+
+    // Admin: delete type (delegation)
+    if (adminTypeTableBody) {
+        adminTypeTableBody.addEventListener('click', (e)=>{
+            const btn = e.target.closest('.admin-del-type');
+            if (!btn) return;
+            const typeName = btn.getAttribute('data-type');
+            if (!typeName || !adminSelectedGroup) return;
+            if (!confirm(`Xóa loại "${typeName}" khỏi nhóm "${adminSelectedGroup}"?`)) return;
+            const list = categoryData[adminSelectedGroup] || [];
+            categoryData[adminSelectedGroup] = list.filter(t => t !== typeName);
+            state.types = state.types.filter(t => t !== typeName);
+            saveCategoriesToStorage();
+            refreshAfterCategoryChange();
+        });
+    }
+
+    // Init
+    console.log('Starting admin product page initialization...');
+    renderPriceOptions();
+    renderGroupFilters();
+    renderAdminGroupTable();
+    renderAdminTypeTable();
+    bindInputs();
+    restoreFromUrl();
+    console.log('State after restore from URL:', state);
+    applyStateToControls();
+    setupMobileFilter();
+    console.log('Calling loadProductsFromApi...');
+    await loadProductsFromApi();
+    console.log('Initialization complete.');
+})();
+
+// ============ PRODUCT MODAL FUNCTIONS ============
+
+// Open product modal
+function openProductModal(productId = null) {
+    const modal = document.getElementById('productModal');
+    const form = document.getElementById('productForm');
+    const title = document.getElementById('productModalTitle');
+    const submitBtn = document.getElementById('modalSubmitBtn');
+    
+    if (!modal) return;
+    
+    // Reset form
+    form.reset();
+    document.getElementById('modalProductId').value = '';
+    
+    // Populate product types from categoryData
+    loadModalProductTypes();
+    
+    if (productId) {
+        // Edit mode
+        title.textContent = 'Sửa Sản Phẩm';
+        submitBtn.innerHTML = '💾 Cập nhật';
+        loadProductDataToModal(productId);
+    } else {
+        // Add mode
+        title.textContent = 'Thêm Sản Phẩm Mới';
+        submitBtn.innerHTML = '💾 Lưu sản phẩm';
+        // Check cache by default
+        document.getElementById('modalCreateCache').checked = true;
+        toggleModalCacheInfo();
+    }
+    
+    modal.style.display = 'block';
+    document.body.style.overflow = 'hidden'; // Prevent background scroll
+}
+
+// Close product modal
+function closeProductModal() {
+    const modal = document.getElementById('productModal');
+    if (modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = ''; // Restore scroll
+        hideModalMessage();
+            // Reset images
+            if (typeof resetImageUploads === 'function') {
+                resetImageUploads();
+            }
+    }
+}
+
+// Load product types into modal select using actual type_code from API
+async function loadModalProductTypes(selectedTypeCode = '') {
+    const select = document.getElementById('modalProductType');
+    if (!select) return;
+
+    try {
+        const res = await fetch('api/admin_product_list.php?limit=1000');
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const data = await res.json();
+        if (!data.success || !data.data) throw new Error('API trả về lỗi');
+
+        // Gom nhóm theo group_name, giá trị option = type_code, nhãn = type_name
+        const typeMap = {};
+        data.data.forEach(p => {
+            const g = p.group || p.group_name || 'Khác';
+            const tc = p.type_code;
+            const tn = p.type_name || p.type;
+            if (!tc || !tn) return;
+            if (!typeMap[g]) typeMap[g] = {};
+            if (!typeMap[g][tc]) {
+                typeMap[g][tc] = tn;
+            }
+        });
+
+        let optionsHTML = '<option value="">-- Chọn loại sản phẩm --</option>';
+        const hasApiTypes = Object.keys(typeMap).length > 0;
+        if (hasApiTypes) {
+            Object.keys(typeMap).forEach(groupName => {
+                const types = typeMap[groupName];
+                optionsHTML += `<optgroup label="${groupName}">`;
+                Object.keys(types).forEach(tc => {
+                    const tn = types[tc];
+                    optionsHTML += `<option value="${tc}">${tn}</option>`;
+                });
+                optionsHTML += '</optgroup>';
+            });
+        }
+
+        // Nếu API không trả type nào, fallback sang categoryData tĩnh
+        if (!hasApiTypes) {
+            Object.keys(window.categoryData || {}).forEach(groupName => {
+                const types = window.categoryData[groupName] || [];
+                if (types.length > 0) {
+                    optionsHTML += `<optgroup label="${groupName}">`;
+                    types.forEach(typeName => {
+                        const typeValue = typeName;
+                        optionsHTML += `<option value="${typeValue}">${typeName}</option>`;
+                    });
+                    optionsHTML += '</optgroup>';
+                }
+            });
+        }
+
+        select.innerHTML = optionsHTML;
+        if (selectedTypeCode) {
+            select.value = selectedTypeCode;
+        }
+    } catch (err) {
+        console.error('loadModalProductTypes error:', err);
+        // Fallback: dùng categoryData tĩnh nếu API lỗi
+        let optionsHTML = '<option value="">-- Chọn loại sản phẩm --</option>';
+        Object.keys(window.categoryData || {}).forEach(groupName => {
+            const types = window.categoryData[groupName] || [];
+            if (types.length > 0) {
+                optionsHTML += `<optgroup label="${groupName}">`;
+                types.forEach(typeName => {
+                    const typeValue = typeName;
+                    optionsHTML += `<option value="${typeValue}">${typeName}</option>`;
+                });
+                optionsHTML += '</optgroup>';
+            }
+        });
+        select.innerHTML = optionsHTML;
+        if (selectedTypeCode) {
+            select.value = selectedTypeCode;
+        }
+    }
+}
+
+// Load product data for edit
+async function loadProductDataToModal(productId) {
+    try {
+        let product = null;
+
+        // Ưu tiên gọi API chi tiết sản phẩm
+        try {
+            const res = await fetch(`api/admin_product_get.php?id=${productId}`);
+            if (res.ok) {
+                const data = await res.json();
+                if (data.success && data.data) {
+                    product = data.data;
+                }
+            }
+        } catch (e) {
+            console.warn('admin_product_get fallback:', e);
+        }
+
+        // Fallback: lấy từ cache API nếu cần
+        if (!product) {
+            const response = await fetch(`api/product_cache.php?action=get&id=${productId}&level=full`);
+            const result = await response.json();
+            if (result.success && result.data) {
+                product = result.data;
+            }
+        }
+
+        if (!product) {
+            throw new Error('Không tìm thấy dữ liệu sản phẩm');
+        }
+
+        // Gán dữ liệu vào form
+        document.getElementById('modalProductId').value = productId;
+        document.getElementById('modalProductName').value = product.name || '';
+        document.getElementById('modalProductSku').value = product.sku || '';
+
+        // Chọn loại theo type_code thực tế
+        const typeCode = product.type_code || '';
+        await loadModalProductTypes(typeCode);
+
+        document.getElementById('modalOriginalPrice').value = (product.original_price ?? '') === '' ? '' : (product.original_price || '');
+        document.getElementById('modalSalePrice').value = (product.sale_price ?? '') === '' ? '' : (product.sale_price || '');
+        document.getElementById('modalStockQuantity').value = (product.stock_quantity ?? '') === '' ? '' : (product.stock_quantity || '');
+
+        const desc = product.long_description || product.short_description || product.description || '';
+        document.getElementById('modalDescription').value = desc;
+        document.getElementById('modalTechnicalSpecs').value = product.technical_specs || '';
+    } catch (error) {
+        console.error('Load product error:', error);
+        showModalMessage('Không thể tải thông tin sản phẩm', 'error');
+    }
+}
+
+// Toggle cache info display
+function toggleModalCacheInfo() {
+    const checkbox = document.getElementById('modalCreateCache');
+    const cacheInfo = document.getElementById('modalCacheInfo');
+    if (checkbox && cacheInfo) {
+        cacheInfo.style.display = checkbox.checked ? 'block' : 'none';
+    }
+}
+
+// Show modal message
+function showModalMessage(message, type) {
+    const statusDiv = document.getElementById('productStatusMessage');
+    if (!statusDiv) return;
+    
+    statusDiv.textContent = message;
+    statusDiv.className = 'status-message ' + type;
+    statusDiv.style.display = 'block';
+    
+    if (type === 'success') {
+        setTimeout(() => {
+            statusDiv.style.display = 'none';
+        }, 5000);
+    }
+}
+
+// Hide modal message
+function hideModalMessage() {
+    const statusDiv = document.getElementById('productStatusMessage');
+    if (statusDiv) {
+        statusDiv.style.display = 'none';
+    }
+}
+
+// Submit product form
+document.addEventListener('DOMContentLoaded', function() {
+    // Add product button click
+    const addProductBtn = document.getElementById('addProductBtn');
+    if (addProductBtn) {
+        addProductBtn.addEventListener('click', function() {
+            openProductModal();
+        });
+    }
+    
+    // Cache checkbox change
+    const cacheCheckbox = document.getElementById('modalCreateCache');
+    if (cacheCheckbox) {
+        cacheCheckbox.addEventListener('change', toggleModalCacheInfo);
+    }
+    
+    // Form submit
+    const productForm = document.getElementById('productForm');
+    if (productForm) {
+        productForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('modalSubmitBtn');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '⏳ Đang lưu...';
+            
+            hideModalMessage();
+            
+            try {
+                const formData = new FormData(this);
+                
+                // Debug: log all form data
+                console.log('Form data being sent:');
+                for (let [key, value] of formData.entries()) {
+                    console.log(`  ${key}:`, value instanceof File ? `File(${value.name})` : value);
+                }
+                
+                const response = await fetch('api/admin_product_save.php', {
+                    method: 'POST',
+                    body: formData,
+                    credentials: 'include'  // Gửi session cookie
+                });
+                
+                console.log('Response status:', response.status);
+                const responseText = await response.text();
+                console.log('Response text:', responseText);
+                
+                let result;
+                try {
+                    result = JSON.parse(responseText);
+                } catch (e) {
+                    console.error('JSON parse error:', e);
+                    throw new Error('Server trả về dữ liệu không hợp lệ: ' + responseText.substring(0, 200));
+                }
+                
+                if (result.success) {
+                    showModalMessage(
+                        result.message + 
+                        (result.cache_created ? ' ✅ Cache đã được tạo!' : ''), 
+                        'success'
+                    );
+                    
+                    // Close modal and refresh page sau 1.5s
+                    setTimeout(() => {
+                        closeProductModal();
+                        // Reload product list (implement based on your needs)
+                        window.location.reload();
+                    }, 1500);
+                } else {
+                    showModalMessage(result.error || 'Có lỗi xảy ra khi lưu sản phẩm', 'error');
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalText;
+                }
+            } catch (error) {
+                console.error('Submit error:', error);
+                showModalMessage('Lỗi: ' + error.message, 'error');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
+            }
+        });
+    }
+    
+    // Close modal when clicking outside
+    const modal = document.getElementById('productModal');
+    if (modal) {
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                closeProductModal();
+            }
+        });
+    }
+    
+    // ESC key to close modal
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeProductModal();
+        }
+    });
+});
+
+// Auto-open edit modal when arriving with ?id= or ?edit=
+document.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(window.location.search);
+    const editId = params.get('id') || params.get('edit');
+    if (editId) {
+        openProductModal(editId);
+    }
+});
+
+</script>
+<script>
+let isLoggedIn = false;
+
+// Account dropdown toggle
+function handleAccountClick(event) {
+    event.stopPropagation();
+    const accountMenu = document.getElementById('accountMenu');
+    if (!accountMenu) return;
+
+    // If not logged in, send to login/auth page (fallback if modal handler is missing)
+    if (!isLoggedIn) {
+        if (typeof toggleLoginForm === 'function') {
+            toggleLoginForm();
+        } else {
+            window.location.href = 'quan-tri-vien-index.html';
+        }
+        return;
+    }
+
+    accountMenu.style.display = accountMenu.style.display === 'block' ? 'none' : 'block';
+}
+
+// Close account menu when clicking outside
+document.addEventListener('click', function(event) {
+    const accountDropdown = document.querySelector('.account-dropdown');
+    const accountMenu = document.getElementById('accountMenu');
+    if (accountDropdown && accountMenu && !accountDropdown.contains(event.target)) {
+        accountMenu.style.display = 'none';
+    }
+});
+
+// Check session and show username under icon
+function checkLoginStatus() {
+    fetch('/check_session.php')
+        .then(response => response.json())
+        .then(data => {
+            const accountDropdown = document.querySelector('.account-dropdown');
+            const usernameDisplay = document.getElementById('usernameDisplay');
+            if (data.logged_in) {
+                isLoggedIn = true;
+                if (accountDropdown) accountDropdown.classList.add('logged-in');
+                if (usernameDisplay) {
+                    usernameDisplay.innerText = data.username || '';
+                    usernameDisplay.style.display = 'block';
+                }
+            } else {
+                isLoggedIn = false;
+                if (accountDropdown) accountDropdown.classList.remove('logged-in');
+                if (usernameDisplay) {
+                    usernameDisplay.style.display = 'none';
+                }
+            }
+        })
+        .catch(() => {});
+}
+
+document.addEventListener('DOMContentLoaded', checkLoginStatus);
+
+function handleLogout() {
+    try { localStorage.removeItem('user_position'); } catch(e) {}
+    fetch('logout.php')
+        .then(() => {
+            window.location.href = 'index.html';
+        })
+        .catch(() => {
+            window.location.href = 'index.html';
+        });
+}
+
+function bindHeaderGroupEvents(){
+    document.querySelectorAll('.category-brands .brand-item').forEach(item => {
+        item.addEventListener('click', function(e){
+            e.preventDefault();
+            const categoryName = this.getAttribute('data-category') || this.textContent.trim();
+            const categoryDetail = document.getElementById('categoryDetail');
+            if (window.categoryData && window.categoryData[categoryName] && categoryDetail) {
+                const items = window.categoryData[categoryName];
+                const itemsPerColumn = Math.ceil(items.length / 3);
+                let columns = ['', '', ''];
+                items.forEach((item, index) => {
+                    const columnIndex = Math.floor(index / itemsPerColumn);
+                    columns[columnIndex] += `<li class="detail-item" data-group="${categoryName}" data-type="${item}">${item}</li>`;
+                });
+                categoryDetail.innerHTML = `
+                    <div class="detail-column">
+                        <h4>${categoryName}</h4>
+                        <ul>${columns[0]}</ul>
+                    </div>
+                    <div class="detail-column">
+                        <ul>${columns[1]}</ul>
+                    </div>
+                    <div class="detail-column">
+                        <ul>${columns[2]}</ul>
+                    </div>
+                `;
+            }
+        });
+    });
+}
+
+// Desktop hover detail click-through
+const detailEl = document.getElementById('categoryDetail');
+if (detailEl) {
+    detailEl.addEventListener('click', function(e) {
+        const li = e.target.closest('.detail-item');
+        if (!li) return;
+        const group = li.getAttribute('data-group') || '';
+        const type = li.getAttribute('data-type') || '';
+        state.groups = group ? [group] : [];
+        state.types = type ? [type] : [];
+        state.page = 1;
+        syncUrl();
+        applyStateToControls();
+        renderTypeGrid(filterList(true));
+        scheduleRender();
+    });
+}
+
+// Unified dropdown & mobile menu logic
+document.addEventListener('DOMContentLoaded', function() {
+    const dropdown = document.querySelector('.dropdown');
+    if (!dropdown) return;
+
+    const dropdownBtn = dropdown.querySelector('.dropdown-btn');
+    const dropdownContent = dropdown.querySelector('.dropdown-content');
+    const originalMenuHTML = dropdownContent.innerHTML;
+    // Render desktop header groups from categoryData
+    renderHeaderGroups();
+
+    function renderHeaderGroups(){
+        const container = document.querySelector('.category-brands');
+        if (!container) return;
+        const groups = Object.keys(window.categoryData || {});
+        container.innerHTML = groups.map(name => {
+            const iconPath = (window.categoryIcons && window.categoryIcons[name]) || '';
+            const iconHTML = iconPath ? `<img src="${iconPath}" alt="${name}" class="category-icon">` : '';
+            return `<div class="brand-item" data-category="${name}">${iconHTML}${name}</div>`;
+        }).join('');
+        bindHeaderGroupEvents();
+    }
+
+    function createProductCategoryHTML() {
+        let gridHTML = '<div class="mobile-category-grid">';
+        Object.keys(window.categoryData || {}).forEach(categoryName => {
+            const iconPath = (window.categoryIcons && window.categoryIcons[categoryName]) || '';
+            gridHTML += `
+                <div class="mobile-category-item" data-category="${categoryName}">
+                    <img src="${iconPath}" alt="${categoryName}" class="mobile-category-icon">
+                    <span>${categoryName}</span>
+                </div>
+            `;
+        });
+        gridHTML += '</div>';
+
+        return `
+            <div class="mobile-menu-header">
+                <button class="mobile-menu-back-btn">‹ Quay lại</button>
+                <h3>Danh mục sản phẩm</h3>
+            </div>
+            ${gridHTML}
+        `;
+    }
+
+    dropdownBtn.addEventListener('click', function(event) {
+        if (window.innerWidth <= 768) {
+            event.preventDefault();
+            event.stopPropagation();
+            dropdown.classList.toggle('mobile-menu-active');
+        }
+    });
+
+    dropdownContent.addEventListener('click', function(event) {
+        if (window.innerWidth > 768) return;
+        const target = event.target;
+
+        if (target.matches('.has-submenu')) {
+            event.preventDefault();
+            dropdownContent.innerHTML = createProductCategoryHTML();
+        }
+
+        if (target.matches('.mobile-menu-back-btn')) {
+            dropdownContent.innerHTML = originalMenuHTML;
+            renderHeaderGroups();
+        }
+
+        const categoryItem = target.closest('.mobile-category-item');
+        if (categoryItem) {
+            const categoryName = categoryItem.getAttribute('data-category');
+            if (categoryName) {
+                dropdown.classList.remove('mobile-menu-active');
+                setGroupFilterFromMenu(categoryName);
+            }
+        }
+
+        const subCategoryItem = target.closest('.mobile-subcategory-item');
+        if (subCategoryItem) {
+            const subName = subCategoryItem.textContent.trim();
+            dropdown.classList.remove('mobile-menu-active');
+            state.types = subName ? [subName] : [];
+            state.page = 1;
+            syncUrl();
+            applyStateToControls();
+            renderTypeGrid(filterList(true));
+            scheduleRender();
+        }
+    });
+
+    document.addEventListener('click', function(event) {
+        if (window.innerWidth <= 768) {
+            if (!dropdown.contains(event.target)) {
+                dropdown.classList.remove('mobile-menu-active');
+            }
+        }
+    });
+
+    window.addEventListener('resize', function() {
+        dropdown.classList.remove('mobile-menu-active');
+        dropdownContent.innerHTML = originalMenuHTML;
+        if (window.innerWidth > 768) {
+            dropdownContent.style.display = '';
+        }
+    });
+
+    // Re-render header groups after reset
+    renderHeaderGroups();
+
+    // Search functionality
+    (function initSearch() {
+        const searchInput = document.querySelector('.search-input');
+        const searchBtn = document.querySelector('.search-btn');
+        
+        if (!searchInput || !searchBtn) return;
+        
+        searchBtn.addEventListener('click', () => {
+            const query = searchInput.value.trim();
+            if (query) {
+                window.location.href = `quan-tri-vien-sanpham.html?search=${encodeURIComponent(query)}`;
+            }
+        });
+        
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const query = searchInput.value.trim();
+                if (query) {
+                    window.location.href = `quan-tri-vien-sanpham.html?search=${encodeURIComponent(query)}`;
+                }
+            }
+        });
+    })();
+});
+</script>
+<script src="search-suggestions.js"></script>
+<script src="profile-modal.js"></script>
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản trị Tin tức | Đức Phương Medical</title>
+    <link rel="icon" type="image/png" href="hinh-anh/logo-favicon.png">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="mobile-responsive.css">
+    <script src="auth-redirect.js"></script>
+</head>
+<body class="admin-page">
+    <header class="header">
+        <div class="container" style="justify-content: space-between;">
+            <div style="display:flex; align-items:center; gap:12px;">
+                <img src="hinh-anh/logo.png" alt="TBYT Đức Phương" style="height:60px;">
+                <div>
+                    <h2 style="color:#0f5132; margin:0;">Quản trị Tin tức</h2>
+                    <small>Thêm nhanh link YouTube cho mục Tin tức - Kiến thức</small>
+                </div>
+            </div>
+            <div>
+                <a href="tin-tuc.html" class="secondary-btn">Xem trang người dùng</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="admin-news">
+        <div class="container">
+            <div class="card">
+                <h3>Thêm video mới</h3>
+                <form id="newsForm" class="news-admin-form">
+                    <label>Tiêu đề
+                        <input type="text" name="title" placeholder="Nhập tiêu đề video" required>
+                    </label>
+                    <label>Link YouTube
+                        <input type="url" name="youtube_url" placeholder="https://www.youtube.com/watch?v=..." required>
+                    </label>
+                    <label>Mô tả ngắn (tuỳ chọn)
+                        <textarea name="note" rows="3" placeholder="Thêm ghi chú / nội dung chính"></textarea>
+                    </label>
+                    <button type="submit" class="primary-btn">Lưu video</button>
+                    <div id="formStatus" class="form-status"></div>
+                </form>
+            </div>
+
+            <div class="card">
+                <div style="display:flex; align-items:center; justify-content:space-between;">
+                    <h3>Danh sách video hiện có</h3>
+                    <button class="secondary-btn" onclick="loadExisting()">↻ Làm mới</button>
+                </div>
+                <div id="existingList" class="admin-news-list"></div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+    const form = document.getElementById('newsForm');
+    const statusEl = document.getElementById('formStatus');
+    const existingEl = document.getElementById('existingList');
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        statusEl.textContent = '';
+        const fd = new FormData(form);
+        try {
+            const res = await fetch('api/news_add.php', { method: 'POST', body: fd });
+            const data = await res.json();
+            if (data.success) {
+                statusEl.textContent = 'Đã lưu video thành công.';
+                statusEl.className = 'form-status success';
+                form.reset();
+                loadExisting();
+            } else {
+                statusEl.textContent = data.error || 'Không lưu được video.';
+                statusEl.className = 'form-status error';
+            }
+        } catch (err) {
+            statusEl.textContent = 'Không lưu được video.';
+            statusEl.className = 'form-status error';
+        }
+    });
+
+    async function loadExisting() {
+        existingEl.innerHTML = '<div class="loading">Đang tải...</div>';
+        try {
+            const res = await fetch('api/news_list.php');
+            const data = await res.json();
+            if (data.success && Array.isArray(data.items)) {
+                if (!data.items.length) {
+                    existingEl.innerHTML = '<div class="muted">Chưa có video.</div>';
+                    return;
+                }
+                existingEl.innerHTML = '';
+                data.items.forEach(item => {
+                    const videoId = item.video_id || '';
+                    const row = document.createElement('div');
+                    row.className = 'admin-news-row';
+                    row.innerHTML = `
+                        <div class="thumb"><img src="${item.thumbnail || 'https://img.youtube.com/vi/' + videoId + '/hqdefault.jpg'}" alt="${item.title}"></div>
+                        <div class="meta">
+                            <div class="title">${item.title}</div>
+                            <div class="note">${item.note || ''}</div>
+                            <div class="info">${new Date(item.created_at || Date.now()).toLocaleString('vi-VN')} • ${item.created_by || 'Admin'}</div>
+                            <a href="https://www.youtube.com/watch?v=${videoId}" target="_blank" rel="noopener">Xem trên YouTube</a>
+                        </div>
+                    `;
+                    existingEl.appendChild(row);
+                });
+            } else {
+                existingEl.innerHTML = '<div class="muted">Không tải được danh sách.</div>';
+            }
+        } catch (err) {
+            existingEl.innerHTML = '<div class="muted">Không tải được danh sách.</div>';
+        }
+    }
+
+    loadExisting();
+    </script>
+</body>
+</html>

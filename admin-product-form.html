@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thêm/Sửa Sản Phẩm - Quản Trị Viên</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="category-style.css">
+    <style>
+        .form-container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px;
+            background: #f0f9ff;
+            border: 2px solid #3b82f6;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .checkbox-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+        
+        .checkbox-group label {
+            margin: 0;
+            font-weight: 600;
+            color: #1e40af;
+            cursor: pointer;
+        }
+        
+        .checkbox-help {
+            font-size: 13px;
+            color: #666;
+            margin-top: 8px;
+        }
+        
+        .btn-submit {
+            background: #3b82f6;
+            color: white;
+            padding: 14px 32px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-submit:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+        }
+        
+        .btn-cancel {
+            background: #e5e7eb;
+            color: #374151;
+            padding: 14px 32px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-left: 12px;
+        }
+        
+        .btn-cancel:hover {
+            background: #d1d5db;
+        }
+        
+        .status-message {
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .status-message.success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #10b981;
+        }
+        
+        .status-message.error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #ef4444;
+        }
+        
+        .cache-info {
+            background: #f0f9ff;
+            border-left: 4px solid #3b82f6;
+            padding: 12px;
+            margin-top: 8px;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-banner">⚙️ QUẢN TRỊ VIÊN - CHỈ DÀNH CHO NHÂN VIÊN Đức Phương</div>
+
+    <div class="form-container">
+        <h1 style="margin-top: 0;">
+            <span id="formTitle">Thêm Sản Phẩm Mới</span>
+        </h1>
+        
+        <div id="statusMessage" class="status-message"></div>
+        
+        <form id="productForm">
+            <input type="hidden" id="productId" name="product_id">
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="productName">Tên sản phẩm <span style="color:red;">*</span></label>
+                    <input type="text" id="productName" name="name" required placeholder="VD: Giường bệnh 3 chức năng">
+                </div>
+                
+                <div class="form-group">
+                    <label for="productSku">Mã SKU <span style="color:red;">*</span></label>
+                    <input type="text" id="productSku" name="sku" required placeholder="VD: GB-3CN-001">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="productType">Loại sản phẩm <span style="color:red;">*</span></label>
+                <select id="productType" name="type_code" required>
+                    <option value="">-- Chọn loại sản phẩm --</option>
+                    <!-- Sẽ được populate bằng JavaScript -->
+                </select>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="originalPrice">Giá gốc (đ) <span style="color:red;">*</span></label>
+                    <input type="number" id="originalPrice" name="original_price" required min="0" step="1000" placeholder="10000000">
+                </div>
+                
+                <div class="form-group">
+                    <label for="salePrice">Giá bán (đ) <span style="color:red;">*</span></label>
+                    <input type="number" id="salePrice" name="sale_price" required min="0" step="1000" placeholder="9000000">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="stockQuantity">Số lượng tồn kho</label>
+                <input type="number" id="stockQuantity" name="stock_quantity" min="0" value="0">
+            </div>
+            
+            <div class="form-group">
+                <label for="description">Mô tả sản phẩm</label>
+                <textarea id="description" name="description" placeholder="Nhập mô tả chi tiết về sản phẩm..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="technicalSpecs">Thông số kỹ thuật</label>
+                <textarea id="technicalSpecs" name="technical_specs" placeholder="Thông số kỹ thuật, cấu hình..."></textarea>
+            </div>
+            
+            <!-- CACHE CHECKBOX - YÊU CẦU CHÍNH -->
+            <div class="checkbox-group">
+                <input type="checkbox" id="createCacheFromForm" name="create_cache_from_form" value="1" checked>
+                <div>
+                    <label for="createCacheFromForm">
+                        ⚡ Tạo cache từ thông tin này (Khuyến nghị)
+                    </label>
+                    <div class="checkbox-help">
+                        Khi bật: User sẽ thấy sản phẩm NGAY LẬP TỨC từ cache (không cần query database). 
+                        Cache sẽ được tự động refresh khi giá/tồn kho thay đổi.
+                    </div>
+                </div>
+            </div>
+            
+            <div id="cacheInfoDisplay" class="cache-info" style="display: none;">
+                <strong>📊 Thông tin cache:</strong>
+                <ul style="margin: 8px 0 0 20px; padding: 0;">
+                    <li>Cache basic: TTL = 1 giờ (3600 giây)</li>
+                    <li>Cache full: TTL = 5 phút (300 giây)</li>
+                    <li>Auto-refresh khi giá/stock thay đổi</li>
+                </ul>
+            </div>
+            
+            <div style="margin-top: 30px;">
+                <button type="submit" class="btn-submit" id="submitBtn">
+                    💾 Lưu sản phẩm
+                </button>
+                <button type="button" class="btn-cancel" onclick="window.history.back()">
+                    ❌ Hủy
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+    // Toggle cache info visibility
+    document.getElementById('createCacheFromForm').addEventListener('change', function() {
+        const cacheInfo = document.getElementById('cacheInfoDisplay');
+        cacheInfo.style.display = this.checked ? 'block' : 'none';
+    });
+    
+    // Show cache info by default (checkbox is checked)
+    document.getElementById('cacheInfoDisplay').style.display = 'block';
+    
+    // Load product types (từ localStorage hoặc API)
+    function loadProductTypes() {
+        const categoryData = window.categoryData || JSON.parse(localStorage.getItem('dp_admin_categoryData_v1') || '{}');
+        const select = document.getElementById('productType');
+        
+        let optionsHTML = '<option value="">-- Chọn loại sản phẩm --</option>';
+        
+        Object.keys(categoryData).forEach((groupName, groupIndex) => {
+            const types = categoryData[groupName] || [];
+            if (types.length > 0) {
+                optionsHTML += `<optgroup label="${groupName}">`;
+                types.forEach((typeName, typeIndex) => {
+                    // Dùng nhãn (typeName); giá trị sẽ là chính tên loại để dễ khớp
+                    const typeValue = typeName;
+                    optionsHTML += `<option value="${typeValue}">${typeName}</option>`;
+                });
+                optionsHTML += '</optgroup>';
+            }
+        });
+        
+        select.innerHTML = optionsHTML;
+    }
+    
+    // Load data khi trang load
+    document.addEventListener('DOMContentLoaded', function() {
+        loadProductTypes();
+        
+        // Kiểm tra edit mode
+        const urlParams = new URLSearchParams(window.location.search);
+        const editId = urlParams.get('id');
+        
+        if (editId) {
+            document.getElementById('formTitle').textContent = 'Sửa Sản Phẩm';
+            document.getElementById('submitBtn').innerHTML = '💾 Cập nhật';
+            loadProductData(editId);
+        }
+    });
+    
+    // Load product data for edit
+    async function loadProductData(productId) {
+        try {
+            // Ưu tiên lấy từ API chi tiết sản phẩm để có đủ trường
+            let product = null;
+            try {
+                const res = await fetch(`api/admin_product_get.php?id=${productId}`);
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.success && data.data) {
+                        product = data.data;
+                    }
+                }
+            } catch (_) {}
+
+            // Fallback sang cache API nếu cần
+            if (!product) {
+                const response = await fetch(`api/product_cache.php?action=get&id=${productId}&level=full`);
+                const result = await response.json();
+                if (result.success && result.data) {
+                    product = result.data;
+                }
+            }
+
+            if (!product) {
+                throw new Error('Không tìm thấy dữ liệu sản phẩm');
+            }
+
+            // Gán dữ liệu vào form: có thì hiển thị, không có để trống
+            document.getElementById('productId').value = productId;
+            document.getElementById('productName').value = product.name || '';
+            document.getElementById('productSku').value = product.sku || '';
+
+            // Chọn loại theo tên nếu có (do option value là tên loại)
+            const typeSelect = document.getElementById('productType');
+            const typeName = product.type_name || product.type || '';
+            if (typeName) {
+                // Tìm option có text khớp typeName
+                const opt = Array.from(typeSelect.options).find(o => (o.text || o.value) === typeName);
+                if (opt) typeSelect.value = opt.value; else typeSelect.value = '';
+            } else {
+                typeSelect.value = '';
+            }
+
+            document.getElementById('originalPrice').value = (product.original_price ?? '') === '' ? '' : (product.original_price || '');
+            document.getElementById('salePrice').value = (product.sale_price ?? '') === '' ? '' : (product.sale_price || '');
+            document.getElementById('stockQuantity').value = (product.stock_quantity ?? '') === '' ? '' : (product.stock_quantity || '');
+
+            // Mô tả: ưu tiên long_description, sau đó short_description, sau đó description
+            const desc = product.long_description || product.short_description || product.description || '';
+            document.getElementById('description').value = desc;
+
+            // Thông số kỹ thuật nếu có
+            document.getElementById('technicalSpecs').value = product.technical_specs || '';
+        } catch (error) {
+            console.error('Load product error:', error);
+            showMessage('Không thể tải thông tin sản phẩm', 'error');
+        }
+    }
+    
+    // Submit form
+    document.getElementById('productForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const submitBtn = document.getElementById('submitBtn');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '⏳ Đang lưu...';
+        
+        try {
+            const formData = new FormData(this);
+            
+            const response = await fetch('api/admin_product_save.php', {
+                method: 'POST',
+                body: formData
+            });
+            
+            const result = await response.json();
+            
+            if (result.success) {
+                showMessage(
+                    result.message + 
+                    (result.cache_created ? ' ✅ Cache đã được tạo!' : ''), 
+                    'success'
+                );
+                
+                // Redirect về trang danh sách sau 1.5s
+                setTimeout(() => {
+                    window.location.href = 'quan-tri-vien-sanpham.html';
+                }, 1500);
+            } else {
+                showMessage(result.error || 'Có lỗi xảy ra khi lưu sản phẩm', 'error');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
+            }
+        } catch (error) {
+            console.error('Submit error:', error);
+            showMessage('Không thể kết nối đến server', 'error');
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalText;
+        }
+    });
+    
+    // Show status message
+    function showMessage(message, type) {
+        const statusDiv = document.getElementById('statusMessage');
+        statusDiv.textContent = message;
+        statusDiv.className = 'status-message ' + type;
+        statusDiv.style.display = 'block';
+        
+        // Auto hide sau 5s nếu là success
+        if (type === 'success') {
+            setTimeout(() => {
+                statusDiv.style.display = 'none';
+            }, 5000);
+        }
+    }
+    </script>
+</body>
+</html>

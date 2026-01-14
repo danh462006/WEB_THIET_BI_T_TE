@@ -1,0 +1,1634 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thông Tin Công Ty - Đức Phương Medical</title>
+    <link rel="icon" type="image/png" href="hinh-anh/logo-favicon.png">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="category-style.css">
+    <link rel="stylesheet" href="profile-modal.css">
+    <link rel="stylesheet" href="mobile-responsive.css">
+    <script src="auth-redirect.js"></script>
+    <script src="profile-modal.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        .info-container {
+            width: 100%;
+            margin: 0;
+            padding: 20px;
+            background-image: url('hinh-thongtin/nen-thongtin.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            min-height: 400px;
+        }
+        .info-layout {
+            display: flex;
+            gap: 30px;
+            align-items: flex-start;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .info-left {
+            flex: 1;
+        }
+        .info-left img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .info-buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+        }
+        .info-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 14px;
+            text-decoration: none;
+            cursor: pointer;
+            border: 1px solid #e5e7eb;
+            background: #0d6efd;
+            color: #fff;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+            transition: transform 0.1s ease, box-shadow 0.2s ease;
+        }
+        .info-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 10px rgba(0,0,0,0.12); }
+        .info-btn.outline { background: #fff; color: #111827; border: 1px solid #e5e7eb; }
+        .info-btn svg { margin-right: 8px; }
+        .info-right {
+            flex: 0.7;
+        }
+        .info-right img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .intro-section-container {
+            padding: 40px 20px;
+            max-width: 1200px;
+            margin: 20px auto;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+        }
+        .intro-section-flex {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+        }
+        .intro-text {
+            flex: 2;
+        }
+        .intro-text h3 {
+            font-size: 24px;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-weight: 600;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #aceaae;
+        }
+        .intro-text p {
+            font-size: 18px;
+            line-height: 1.8;
+            color: #34495e;
+            margin: 0 0 15px 0;
+        }
+        .intro-image {
+            flex: 1;
+            text-align: center;
+        }
+        .intro-image img {
+            max-width: 220px;
+            height: auto;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        .intro-image img:hover {
+            transform: scale(1.05);
+        }
+
+        .section-divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 40px 20px;
+            color: #2c3e50;
+        }
+        .section-divider span {
+            font-size: 22px;
+            font-weight: 600;
+            padding: 0 20px;
+            text-transform: uppercase;
+        }
+        .section-divider::before,
+                .section-divider::after {
+                    content: '';
+                    flex: 1;
+                    border-bottom: 3px solid #aceaae;
+                }
+        
+                        .product-card-container {
+                            display: flex;
+                            justify-content: flex-start;
+                            padding: 0px 20px;
+                        }
+        
+                        .product-card-container-reversed {
+                            display: flex;
+                            justify-content: flex-end;
+                            padding: 0px 20px;
+                        }
+        
+                                .product-card {
+                                    width: 50%;                    display: flex;
+                    background-color: #fff;
+                    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+                    border-radius: 10px;
+                    border-top-right-radius: 150px;
+                    border-bottom-right-radius: 150px;
+                    overflow: hidden;
+                    transition: transform 0.3s ease;
+                }
+        
+                                .product-card-reversed {
+                                    width: 50%;
+                                    display: flex;
+                                    background-color: #fff;
+                                    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+                                    border-radius: 10px;
+                                    border-top-left-radius: 150px;
+                                    border-bottom-left-radius: 150px;
+                                    overflow: hidden;
+                                    transition: transform 0.3s ease;
+                                }
+        
+                .product-card:hover, .product-card-reversed:hover {
+                    transform: translateY(-5px);
+                }
+        
+                        .product-card-text {
+                            flex: 3;
+                            padding: 30px;
+                        }                .product-card-text h3 {
+                    font-size: 22px;
+                    color: #2c3e50;
+                    margin-top: 0;
+                }
+                .product-card-text ul {
+                    list-style: none;
+                    padding-left: 0;
+                }
+                .product-card-text p {
+                    line-height: 1.8;
+                    margin-bottom: 15px;
+                }
+                .product-card-text li {
+                    margin-bottom: 10px;
+                    line-height: 1.6;
+                }
+                .product-card-image {
+                    flex: 1;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+                .product-card-image img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: contain;
+                }
+
+                .product-card-reversed .product-card-image img {
+                    transform: translateX(20px);
+                }
+        
+                @media (max-width: 992px) {
+                    .product-card, .product-card-reversed {
+                        width: 80%;
+                    }
+                }   
+        
+                @media (max-width: 768px) {
+                    .product-card-container, .product-card-container-reversed {
+                        justify-content: center;
+                    }
+                    .product-card, .product-card-reversed {
+                        width: 100%;
+                        flex-direction: column;
+                        border-radius: 20px;
+                    }
+                    .product-card-image {
+                        order: -1;
+                        min-height: 200px;
+                    }
+                    .product-card-reversed .product-card-image img {
+                        transform: none;
+                    }
+
+                    /* Animation cho Mobile Menu */
+                    @keyframes slideUpMenu {
+                        from { opacity: 0; transform: translateY(20px); }
+                        to { opacity: 1; transform: translateY(0); }
+                    }
+
+                    .dropdown.mobile-menu-active .dropdown-content {
+                        display: block;
+                        animation: slideUpMenu 0.3s ease forwards;
+                        /* Đảm bảo menu chỉ cao vừa đủ nội dung (ngay dưới mục Tin tức) */
+                        height: auto;
+                        max-height: 70vh; /* Giới hạn chiều cao nếu danh sách quá dài */
+                        overflow-y: auto;
+                    }
+                    
+                    /* Responsive overrides for Exhibition Section (4 slides) */
+                    .exhibition-section .project-track {
+                        width: 400% !important;
+                    }
+                    .exhibition-section .project-slide {
+                        flex: 0 0 25% !important;
+                        width: 25% !important;
+                    }
+                }
+        
+                @media (max-width: 768px) {
+            .info-layout {
+                flex-direction: column;
+            }
+            .intro-section-flex {
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
+            }
+        }
+        
+        /* Exhibition Section Styles (4 slides) */
+        .exhibition-section .project-track {
+            width: 400%;
+        }
+        .exhibition-section .project-slide {
+            flex: 0 0 25%;
+            width: 25%;
+        }
+        
+        /* Tối ưu khoảng cách cho phần triển lãm và dự án */
+        .exhibition-section {
+            padding: 10px 0 !important;
+        }
+        .exhibition-section h2 {
+            margin-bottom: 10px !important;
+            margin-top: 0 !important;
+        }
+        .exhibition-section .projects-form {
+            padding-top: 10px !important;
+            padding-bottom: 10px !important;
+        }
+        
+        /* Factory Section Styles (3 slides) override exhibition-section 4 slides */
+        #factory-section .project-track {
+            width: 300% !important;
+        }
+        #factory-section .project-slide {
+            flex: 0 0 33.333% !important;
+            width: 33.333% !important;
+        }
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .modal-content {
+            animation: fadeInDown 0.4s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <!-- Profile Modal System -->
+    <div id="profileModal" class="profile-modal" style="display: none;">
+        <div class="profile-modal-content">
+            <span class="profile-close" onclick="closeProfileModal()">&times;</span>
+            <h2>Thông tin tài khoản</h2>
+            <div class="profile-avatar-section">
+                <img id="profileAvatar" src="hinh-anh/hinh-tk-macdinh.png" alt="Avatar" class="profile-avatar-img">
+                <input type="file" id="avatarInput" accept="image/*" style="display: none;" onchange="handleAvatarUpload(event)">
+                <button class="profile-btn-secondary" onclick="document.getElementById('avatarInput').click()">Chỉnh sửa avatar</button>
+            </div>
+            <div class="profile-info-section">
+                <div class="profile-field"><label>Tên người dùng:</label><input type="text" id="profileUsername" class="profile-input" readonly><button class="profile-btn-edit" onclick="enableEdit('profileUsername')">✏️</button></div>
+                <div class="profile-field"><label>Số điện thoại:</label><input type="text" id="profilePhone" class="profile-input" readonly><button class="profile-btn-change" onclick="openChangePhoneModal()">Thay đổi</button></div>
+                <div class="profile-field"><label>Email:</label><input type="email" id="profileEmail" class="profile-input" readonly><button class="profile-btn-change" onclick="openChangeEmailModal()">Thay đổi</button></div>
+                <div class="profile-field"><label>Mật khẩu:</label><div style="position: relative;"><input type="password" id="profilePassword" class="profile-input" value="••••••••" readonly><span onclick="togglePasswordVisibility()" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; font-size: 20px;">👁️</span></div><a href="#" class="profile-link-change" onclick="openChangePasswordModal(); return false;">Thay đổi mật khẩu</a></div>
+                <div class="profile-field"><label>Địa chỉ:</label><textarea id="profileAddress" class="profile-textarea" rows="3"></textarea></div>
+                <button class="profile-btn-primary" onclick="saveProfileChanges()">Lưu thay đổi</button>
+            </div>
+        </div>
+    </div>
+    <div id="changePasswordModal" class="profile-modal" style="display: none;">
+        <div class="profile-modal-content profile-modal-small">
+            <span class="profile-close" onclick="closeChangePasswordModal()">&times;</span>
+            <h3>Thay đổi mật khẩu</h3>
+            <div class="profile-field"><label>Mật khẩu cũ:</label><input type="password" id="oldPassword" class="profile-input"></div>
+            <div class="profile-field"><label>Mật khẩu mới:</label><input type="password" id="newPassword" class="profile-input"></div>
+            <div class="profile-field"><label>Mã xác nhận:</label><div style="display: flex; gap: 10px;"><input type="text" id="passwordVerifyCode" class="profile-input" style="flex: 1;"><button class="profile-btn-secondary" onclick="sendPasswordVerificationCode()">Gửi mã</button></div><small style="color: #666;">Mã xác nhận sẽ được gửi đến email của bạn</small></div>
+            <button class="profile-btn-primary" onclick="updatePassword()">Cập nhật mật khẩu</button>
+        </div>
+    </div>
+    <div id="changePhoneModal" class="profile-modal" style="display: none;">
+        <div class="profile-modal-content profile-modal-small">
+            <span class="profile-close" onclick="closeChangePhoneModal()">&times;</span>
+            <h3>Thay đổi số điện thoại</h3>
+            <div class="profile-field"><label>Số điện thoại mới:</label><input type="text" id="newPhone" class="profile-input"></div>
+            <div class="profile-field"><label>Mã xác nhận:</label><div style="display: flex; gap: 10px;"><input type="text" id="phoneVerifyCode" class="profile-input" style="flex: 1;"><button class="profile-btn-secondary" onclick="sendPhoneVerificationCode()">Gửi mã</button></div><small style="color: #666;">Mã xác nhận sẽ được gửi đến SĐT mới</small></div>
+            <button class="profile-btn-primary" onclick="updatePhone()">Cập nhật SĐT</button>
+        </div>
+    </div>
+    <div id="changeEmailModal" class="profile-modal" style="display: none;">
+        <div class="profile-modal-content profile-modal-small">
+            <span class="profile-close" onclick="closeChangeEmailModal()">&times;</span>
+            <h3>Thay đổi Email</h3>
+            <div class="profile-field"><label>Email mới:</label><input type="email" id="newEmail" class="profile-input"></div>
+            <div class="profile-field"><label>Mã xác nhận:</label><div style="display: flex; gap: 10px;"><input type="text" id="emailVerifyCode" class="profile-input" style="flex: 1;"><button class="profile-btn-secondary" onclick="sendEmailVerificationCode()">Gửi mã</button></div><small style="color: #666;">Mã xác nhận sẽ được gửi đến email mới</small></div>
+            <button class="profile-btn-primary" onclick="updateEmail()">Cập nhật Email</button>
+        </div>
+    </div>
+
+    <header class="header">
+        <div class="container">
+            <div class="logo-section">
+                <img src="hinh-anh/logo.png" alt="TBYT Đức Phương" class="logo">
+            </div>
+            
+            <div class="search-section">
+                <div class="search-box">
+                    <input type="text" placeholder="Tìm Kiếm ..." class="search-input" autocomplete="off">
+                    <button class="search-btn">🔍</button>
+                </div>
+                <div class="search-suggestions" id="searchSuggestions"></div>
+            </div>
+            
+            <div class="user-section">
+                <div class="account-dropdown">
+                    <button class="account-btn" onclick="handleAccountClick(event)">
+                        <img src="hinh-anh/icon_tk.png" alt="Tài khoản" class="account-icon">
+                    </button>
+                    <div id="usernameDisplay" class="username-display" style="display: none;"></div>
+                    <div class="account-menu" id="accountMenu" style="min-width: 150px; right: 0; left: auto;">
+                        <a href="#" onclick="event.stopPropagation(); openProfileModal(); return false;">Thông tin tài khoản</a>
+                        <a href="#">Đơn hàng của tôi</a>
+                        <a href="#" onclick="handleLogout(); return false;">Đăng xuất</a>
+                    </div>
+                </div>
+                <button class="cart-btn">🛒 Giỏ hàng</button>
+                <div class="dropdown">
+                    <button class="dropdown-btn">📋 Danh mục ▼</button>
+                    <div class="dropdown-content">
+                        <a href="index.html">Trang chủ</a>
+                        <div class="dropdown-item-with-submenu">
+                            <a href="#" class="has-submenu">Sản phẩm</a>
+                            <div class="submenu">
+                                <div class="submenu-content">
+                                    <div class="category-header">
+                                        <h3>🔥 Gợi ý cho bạn</h3>
+                                    </div>
+                                    
+                                    <div class="category-brands">
+                                        <div class="brand-item"><img src="icon-hinhdanhmuc/nhom-giuong.png" alt="Giường" class="category-icon">Giường</div>
+                                        <div class="brand-item"><img src="icon-hinhdanhmuc/nhom-xelan.png" alt="Xe lăn" class="category-icon">Xe lăn</div>
+                                        <div class="brand-item"><img src="icon-hinhdanhmuc/nhom-xedien.png" alt="Xe Scooter điện" class="category-icon">Xe Scooter điện</div>
+                                        <div class="brand-item"><img src="icon-hinhdanhmuc/nhom-bangca.png" alt="Băng ca" class="category-icon">Băng ca</div>
+                                        <div class="brand-item"><img src="icon-hinhdanhmuc/nhom-tu.png" alt="Tủ" class="category-icon">Tủ</div>
+                                        <div class="brand-item"><img src="icon-hinhdanhmuc/nhom-maytaooxy.png" alt="Máy tạo oxy" class="category-icon">Máy tạo oxy</div>
+                                        <div class="brand-item"><img src="icon-hinhdanhmuc/nhom-maydo.png" alt="Máy đo" class="category-icon">Máy đo</div>
+                                        <div class="brand-item"><img src="icon-hinhdanhmuc/nhom-xong.png" alt="Máy xông" class="category-icon">Máy xông</div>
+                                        <div class="brand-item"><img src="icon-hinhdanhmuc/nhom-mayhutdich.png" alt="Máy hút dịch" class="category-icon">Máy hút dịch</div>
+                                        <div class="brand-item"><img src="icon-hinhdanhmuc/nhom-massage.png" alt="Máy massage" class="category-icon">Máy massage</div>
+                                        <div class="brand-item"><img src="icon-hinhdanhmuc/nhom-maytap.png" alt="Thiết bị tập" class="category-icon">Thiết bị tập</div>
+                                        <div class="brand-item"><img src="icon-hinhdanhmuc/nhom-nem.png" alt="Nệm" class="category-icon">Nệm</div>
+                                        <div class="brand-item"><img src="icon-hinhdanhmuc/nhom-dungcuhotro.png" alt="Dụng cụ hỗ trợ" class="category-icon">Dụng cụ hỗ trợ</div>
+                                        <div class="brand-item"><img src="icon-hinhdanhmuc/nhom-thietbiyte.png" alt="Thiết bị y tế khác" class="category-icon">Thiết bị y tế khác</div>
+                                    </div>
+
+                                    <div class="category-main">
+                                        <div class="category-detail" id="categoryDetail">
+                                            <p>Di chuột vào các nhóm sản phẩm ở trên để xem chi tiết</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="thong-tin.html">Giới thiệu</a>
+                        <a href="tin-tuc.html">Tin tức - Kiến thức</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <div class="info-container reveal">
+        <div class="info-layout">
+            <div class="info-left">
+                <img src="hinh-thongtin/congty.png" alt="Hình công ty">
+                <div class="info-buttons">
+                    <a class="info-btn" href="https://ducphuongmedical.com/thongtin/DucPhuong_Company_Profile.pdf" target="_blank" rel="noopener">
+                        📄 Company Profile (PDF)
+                    </a>
+                    <a class="info-btn outline" href="https://ducphuongmedical.com/thongtin/DucPhuong_Catalogue_2026.pdf" target="_blank" rel="noopener">
+                        📚 Catalogue 2026 (PDF)
+                    </a>
+                </div>
+            </div>
+            <div class="info-right">
+                <img src="hinh-thongtin/thongtin-congty.png" alt="Thông tin công ty">
+            </div>
+        </div>
+    </div>
+
+    <div class="intro-section-container reveal">
+        <div class="intro-section-flex">
+            <div class="intro-text">
+                <h3>Kính gửi Quý Đối tác và Khách hàng</h3>
+                <p>
+                    Trước tiên, Công ty TNHH Thiết Bị Y Tế Đức Phương xin gửi đến Quý vị lời chào trân trọng cùng những lời chúc tốt đẹp nhất về sức khỏe và bình an.
+                </p>
+                <p>
+                    Chúng tôi rất vinh dự được giới thiệu đôi nét về hành trình hình thành, phát triển cũng như tầm nhìn và sứ mệnh mà Đức Phương đã và đang không ngừng theo đuổi trong suốt hơn một thập kỷ qua.
+                </p>
+            </div>
+            <div class="intro-image">
+                <img src="hinh-anh/logo-favicon.png" alt="Logo Đức Phương">
+            </div>
+        </div>
+    </div>
+
+    <div class="intro-section-container reveal">
+        <div class="intro-section-flex">
+            <div class="intro-text">
+                <h3>Giới thiệu chung</h3>
+                <p>
+                    Công Ty TNHH Thiết Bị Y Tế Đức Phương, với 13 năm kinh nghiệm, là một trong những đơn vị uy tín hàng đầu tại Việt Nam trong lĩnh vực cung cấp thiết bị y tế, dụng cụ thể thao và giường bệnh nhân chất lượng cao.
+                </p>
+                <p>
+                    Với nền tảng chuyên môn vững chắc và sự nỗ lực không ngừng, Đức Phương tự hào mang đến cho khách hàng những sản phẩm đáng tin cậy, góp phần nâng cao chất lượng chăm sóc sức khỏe tại gia đình, phòng khám và bệnh viện.
+                </p>
+            </div>
+            <div class="intro-image">
+                <img src="hinh-anh/logo-Tajermy.png" alt="Logo Tajermy">
+            </div>
+        </div>
+    </div>
+    
+    <div class="section-divider reveal">
+        <span>Ngành nghề kinh doanh</span>
+    </div>
+
+    <div class="product-card-container reveal">
+        <div class="product-card">
+            <div class="product-card-text">
+                <h3>Thiết bị y tế</h3>
+                <p>Chúng tôi cung cấp đa dạng các sản phẩm y tế hiện đại, bao gồm:</p>
+                <ul>
+                    <li>– Máy tạo oxy chất lượng cao</li>
+                    <li>– Máy đo huyết áp, máy đo đường huyết</li>
+                    <li>– Máy xông khí dung và thiết bị hỗ trợ điều trị hô hấp</li>
+                </ul>
+                <p>Mỗi sản phẩm đều được tuyển chọn từ các nhà cung cấp uy tín, đạt chuẩn an toàn và mang lại hiệu quả điều trị tối ưu.</p>
+            </div>
+            <div class="product-card-image">
+                <img src="hinh-anh/hinh-thietbi.png" alt="Thiết bị y tế">
+            </div>
+        </div>
+    </div>
+
+    <div class="product-card-container-reversed reveal">
+        <div class="product-card-reversed">
+            <div class="product-card-image">
+                <img src="hinh-anh/hinh-dung-cu-the-thao.png" alt="Dụng cụ thể thao">
+            </div>
+            <div class="product-card-text">
+                <h3>Dụng cụ thể thao - chăm sóc sức khỏe</h3>
+                <p>Chúng tôi cung cấp đa dạng các thiết bị thể thao và chăm sóc sức khỏe, bao gồm:</p>
+                <ul>
+                    <li>Máy chạy bộ, xe đạp tập, máy tập đa năng</li>
+                    <li>Thiết bị thư giãn, massage hỗ trợ phục hồi thể chất</li>
+                </ul>
+                <p>Những sản phẩm này giúp người dùng nâng cao sức khỏe, cải thiện thể lực và duy trì lối sống lành mạnh.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="product-card-container reveal">
+        <div class="product-card">
+            <div class="product-card-text">
+                <h3>Giường bệnh nhân</h3>
+                <p>Sản phẩm giường y tế là thế mạnh của Đức Phương, gồm:</p>
+                <ul>
+                    <li>Giường bệnh nhân điều khiển điện</li>
+                    <li>Giường bệnh nhân cơ khí</li>
+                    <li>Giường đa chức năng dùng trong gia đình và bệnh viện</li>
+                </ul>
+                <p>Tất cả được thiết kế an toàn, chắc chắn, hỗ trợ tối đa cho bệnh nhân và nhân viên y tế trong quá trình chăm sóc.</p>
+            </div>
+            <div class="product-card-image">
+                <img src="hinh-anh/hinh-giuong.png" alt="Giường bệnh nhân">
+            </div>
+        </div>
+    </div>
+
+    <div class="section-divider reveal">
+        <span>Các triển lãm và dự án hợp tác</span>
+    </div>
+
+    <section class="projects-section reveal exhibition-section" id="exhibition-section">
+        <div class="container">
+            <h2>CÁC TRIỂN LÃM </h2>
+            <div class="projects-form">
+                <div class="projects-slideshow">
+                    <div class="project-track" id="exhibitionTrack">
+                        <div class="project-slide">
+                            <div class="project-item" onclick="openCertModal('hinh-trien-lam/trien-lam1.png', 'Triển lãm 1')">
+                                <img src="hinh-trien-lam/trien-lam1.png" alt="Triển lãm 1">
+                            </div>
+                            <div class="project-item" onclick="openCertModal('hinh-trien-lam/trien-lam2.png', 'Triển lãm 2')">
+                                <img src="hinh-trien-lam/trien-lam2.png" alt="Triển lãm 2">
+                            </div>
+                        </div>
+                        <div class="project-slide">
+                            <div class="project-item" onclick="openCertModal('hinh-trien-lam/trien-lam3.png', 'Triển lãm 3')">
+                                <img src="hinh-trien-lam/trien-lam3.png" alt="Triển lãm 3">
+                            </div>
+                            <div class="project-item" onclick="openCertModal('hinh-trien-lam/trien-lam4.png', 'Triển lãm 4')">
+                                <img src="hinh-trien-lam/trien-lam4.png" alt="Triển lãm 4">
+                            </div>
+                        </div>
+                        <div class="project-slide">
+                            <div class="project-item" onclick="openCertModal('hinh-trien-lam/trien-lam5.png', 'Triển lãm 5')">
+                                <img src="hinh-trien-lam/trien-lam5.png" alt="Triển lãm 5">
+                            </div>
+                            <div class="project-item" onclick="openCertModal('hinh-trien-lam/trien-lam6.png', 'Triển lãm 6')">
+                                <img src="hinh-trien-lam/trien-lam6.png" alt="Triển lãm 6">
+                            </div>
+                        </div>
+                        <div class="project-slide">
+                            <div class="project-item" onclick="openCertModal('hinh-trien-lam/trien-lam7.png', 'Triển lãm 7')">
+                                <img src="hinh-trien-lam/trien-lam7.png" alt="Triển lãm 7">
+                            </div>
+                            <div class="project-item" onclick="openCertModal('hinh-trien-lam/trien-lam8.png', 'Triển lãm 8')">
+                                <img src="hinh-trien-lam/trien-lam8.png" alt="Triển lãm 8">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="project-nav-btn project-prev-btn" onclick="prevExhibitionSlide()">‹</button>
+                <button type="button" class="project-nav-btn project-next-btn" onclick="nextExhibitionSlide()">›</button>
+                <div class="project-indicators">
+                    <span class="project-dot active" onclick="currentExhibitionSlide(1)"></span>
+                    <span class="project-dot" onclick="currentExhibitionSlide(2)"></span>
+                    <span class="project-dot" onclick="currentExhibitionSlide(3)"></span>
+                    <span class="project-dot" onclick="currentExhibitionSlide(4)"></span>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="projects-section reveal exhibition-section" id="projects-section-info">
+        <div class="container">
+            <h2>DỰ ÁN </h2>
+            <div class="projects-form">
+                <div class="projects-slideshow">
+                    <div class="project-track" id="projectTrackInfo">
+                        <div class="project-slide">
+                            <div class="project-item" onclick="openCertModal('hinh-du-an/du-an1.png', 'Dự án 1')">
+                                <img src="du-an/du-an1.png" alt="Dự án 1">
+                            </div>
+                            <div class="project-item" onclick="openCertModal('hinh-du-an/du-an2.png', 'Dự án 2')">
+                                <img src="du-an/du-an2.png" alt="Dự án 2">
+                            </div>
+                        </div>
+                        <div class="project-slide">
+                            <div class="project-item" onclick="openCertModal('hinh-du-an/du-an3.png', 'Dự án 3')">
+                                <img src="du-an/du-an3.png" alt="Dự án 3">
+                            </div>
+                            <div class="project-item" onclick="openCertModal('hinh-du-an/du-an4.png', 'Dự án 4')">
+                                <img src="du-an/du-an4.png" alt="Dự án 4">
+                            </div>
+                        </div>
+                        <div class="project-slide">
+                            <div class="project-item" onclick="openCertModal('hinh-du-an/du-an5.png', 'Dự án 5')">
+                                <img src="du-an/du-an5.png" alt="Dự án 5">
+                            </div>
+                            <div class="project-item" onclick="openCertModal('hinh-du-an/du-an6.png', 'Dự án 6')">
+                                <img src="du-an/du-an6.png" alt="Dự án 6">
+                            </div>
+                        </div>
+                        <div class="project-slide">
+                            <div class="project-item" onclick="openCertModal('hinh-du-an/du-an7.png', 'Dự án 7')">
+                                <img src="du-an/du-an7.png" alt="Dự án 7">
+                            </div>
+                            <div class="project-item" onclick="openCertModal('hinh-du-an/du-an8.png', 'Dự án 8')">
+                                <img src="du-an/du-an8.png" alt="Dự án 8">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="project-nav-btn project-prev-btn" onclick="prevProjectInfoSlide()">‹</button>
+                <button type="button" class="project-nav-btn project-next-btn" onclick="nextProjectInfoSlide()">›</button>
+                <div class="project-indicators">
+                    <span class="project-dot active" onclick="currentProjectInfoSlide(1)"></span>
+                    <span class="project-dot" onclick="currentProjectInfoSlide(2)"></span>
+                    <span class="project-dot" onclick="currentProjectInfoSlide(3)"></span>
+                    <span class="project-dot" onclick="currentProjectInfoSlide(4)"></span>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="section-divider reveal">
+        <span>Xương Sản Xuất </span>
+    </div>
+
+    <section class="projects-section reveal exhibition-section" id="factory-section">
+        <div class="container">
+            <h2>XƯỞNG SẢN XUẤT</h2>
+            <div class="projects-form">
+                <div class="projects-slideshow">
+                    <div class="project-track" id="factoryTrack">
+                        <div class="project-slide">
+                            <div class="project-item" onclick="openCertModal('hinh-xuong/hinh-xuong1.png', 'Xưởng 1')">
+                                <img src="hinh-xuong/hinh-xuong1.png" alt="Xưởng 1">
+                            </div>
+                            <div class="project-item" onclick="openCertModal('hinh-xuong/hinh-xuong2.png', 'Xưởng 2')">
+                                <img src="hinh-xuong/hinh-xuong2.png" alt="Xưởng 2">
+                            </div>
+                        </div>
+                        <div class="project-slide">
+                            <div class="project-item" onclick="openCertModal('hinh-xuong/hinh-xuong3.png', 'Xưởng 3')">
+                                <img src="hinh-xuong/hinh-xuong3.png" alt="Xưởng 3">
+                            </div>
+                            <div class="project-item" onclick="openCertModal('hinh-xuong/hinh-xuong4.png', 'Xưởng 4')">
+                                <img src="hinh-xuong/hinh-xuong4.png" alt="Xưởng 4">
+                            </div>
+                        </div>
+                        <div class="project-slide">
+                            <div class="project-item" onclick="openCertModal('hinh-xuong/hinh-xuong5.png', 'Xưởng 5')">
+                                <img src="hinh-xuong/hinh-xuong5.png" alt="Xưởng 5">
+                            </div>
+                            <div class="project-item" onclick="openCertModal('hinh-xuong/hinh-xuong6.png', 'Xưởng 6')">
+                                <img src="hinh-xuong/hinh-xuong6.png" alt="Xưởng 6">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="project-nav-btn project-prev-btn" onclick="prevFactorySlide()">‹</button>
+                <button type="button" class="project-nav-btn project-next-btn" onclick="nextFactorySlide()">›</button>
+                <div class="project-indicators">
+                    <span class="project-dot active" onclick="currentFactorySlide(1)"></span>
+                    <span class="project-dot" onclick="currentFactorySlide(2)"></span>
+                    <span class="project-dot" onclick="currentFactorySlide(3)"></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Hỗ trợ khách hàng</h3>
+                    <ul>
+                        <li>Hotline: 0937 043 808</li>
+                        <li>(8-21h kể cả T7, CN)</li>
+                        <li>Điều khoản dịch vụ</li>
+                        <li>Chính sách phục vụ</li>
+                        <li>Chính sách đổi trả</li>
+                        <li>Chính sách bảo mật</li>
+                        <li>Chính sách vận chuyển</li>
+                        <li>Chính sách thanh toán</li>
+                        <li>Chính sách bảo hành</li>
+                        <li>Hỗ trợ khách hàng: ducphuongmedical@gmail.com</li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Bản tin sức khỏe</h3>
+                    <ul>
+                        <li>Tin tức về giường bệnh nhân</li>
+                        <li>Hướng dẫn sử dụng giường bệnh</li>
+                        <li>Hướng dẫn sử dụng xe lăn điện</li>
+                        <li>Tin tức về máy tạo Oxy</li>
+                        <li>Tin tức về Xe Lăn</li>
+                    </ul>
+                    
+
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Phương thức thanh toán</h3>
+                    <div class="payment-methods">
+                        <img src="hinh-thanhtoan/visa.png" alt="Visa">
+                        <img src="hinh-thanhtoan/mastercard.png" alt="Mastercard">
+                        <img src="hinh-thanhtoan/jcb.png" alt="JCB">
+                        <img src="hinh-thanhtoan/momo.png" alt="MoMo">
+                    </div>
+                    
+                    <h4>Dịch vụ giao hàng</h4>
+                    <div class="delivery-services">
+                        <img src="hinh-anh/giao-hang.png" alt="Giao hàng">
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Kết nối với chúng tôi</h3>
+                    <div class="social-links">
+                        <a href="https://www.facebook.com/ducphuongnguyenphuoctay" target="_blank">
+                            <img src="hinh-anh/fb-logo.png" alt="Facebook">
+                        </a>
+                        <a href="https://youtube.com/@ducphuongmedical" target="_blank">
+                            <img src="hinh-anh/youtube-icon.png" alt="YouTube">
+                        </a>
+                        <a href="https://zalo.me/0938.062.808" target="_blank">
+                            <img src="hinh-anh/icon-zalo.png" alt="Zalo">
+                        </a>
+                        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=ducphuongmedical@gmail.com" target="_blank">
+                            <img src="hinh-anh/icon-gmail.png" alt="Gmail">
+                        </a>
+                    </div>
+                    
+                    <div class="certificates">
+                        <h4>Chứng nhận bởi</h4>
+                        <div class="cert-logos">
+                            <img src="hinh-anh/icon-ddk.png" alt="Đã đăng ký">
+                        </div>
+                    </div>
+                    
+
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <div class="footer-bottom-content">
+                    <div class="company-info">
+                        <p>Địa chỉ: 12 Đông Hồ, Phường 08, Quận Tân Bình, TP.HCM</p>
+                        <p>TaJerMy nhận đặt hàng trực tuyến và giao hàng tận nơi hoặc mua hàng trực tiếp tại cửa hàng</p>
+                        <p>Giấy chứng nhận Đăng ký Kinh doanh số 0313717853 do Sở Kế hoạch và Đầu tư Thành phố Hồ Chí Minh cấp ngày 25/03/2016</p>
+                        <p>&copy; 2022 - Bản quyền của TaJerMy - www.ducphuongmedical.com. Cấm sao chép dưới mọi hình thức nếu không có sự chấp thuận bằng văn bản.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeLoginForm()">&times;</span>
+            <div class="login-container">
+                <div class="login-header">
+                    <div class="service-icons">
+                        <div class="fpt-icon">TaJerMy</div>
+                        <div class="arrow">→</div>
+                        <div class="shop-icon">🛍️</div>
+                    </div>
+                    <h2>Tài khoản sử dụng dịch vụ <span class="fpt-logo">TaJerMy</span></h2>
+                </div>
+                
+                <div class="login-form">
+                    <!-- Step 1: Phone -->
+                    <div id="loginStep1">
+                        <label>Tên đăng nhập / Số điện thoại <span class="required">*</span></label>
+                        <input type="text" id="loginInput" placeholder="Nhập tên đăng nhập hoặc số điện thoại" class="login-input">
+                        <button class="continue-btn" onclick="handleLoginStep1()">Tiếp tục</button>
+                    </div>
+
+                    <!-- Step 2: Password -->
+                    <div id="loginStep2" style="display: none;">
+                        <div class="login-header-step2"><button class="back-btn" onclick="backToStep1()">←</button> Nhập mật khẩu</div>
+                        <label>Mật khẩu <span class="required">*</span></label>
+                        <input type="password" id="loginPassword" placeholder="Nhập mật khẩu" class="login-input">
+                        <button class="continue-btn" onclick="handleLoginStep2()">Đăng nhập</button>
+                    </div>
+
+                    <!-- Register Step -->
+                    <div id="registerStep" style="display: none;">
+                        <div class="login-header-step2"><button class="back-btn" onclick="backToLogin()">←</button> Đăng ký tài khoản</div>
+                        
+                        <label>Tên đăng nhập <span class="required">*</span></label>
+                        <input type="text" id="regUsername" class="login-input" placeholder="Nhập tên đăng nhập">
+                        
+                        <label>Số điện thoại <span class="required">*</span></label>
+                        <input type="text" id="regPhone" class="login-input" placeholder="Nhập số điện thoại">
+                        
+                        <label>Email <span class="required">*</span></label>
+                        <input type="email" id="regGmail" class="login-input" placeholder="Nhập email">
+                        
+                        <label>Mật khẩu <span class="required">*</span></label>
+                        <div class="password-wrapper">
+                            <input type="password" id="regPass" class="login-input" placeholder="Nhập mật khẩu">
+                            <span class="password-toggle-icon" onclick="toggleRegisterPassword(this)">👁️</span>
+                        </div>
+                        
+                        <button class="continue-btn" onclick="handleRegister()">Đăng ký</button>
+                        <div id="registerMessage" style="text-align: center; margin-top: 10px; font-weight: bold;"></div>
+                    </div>
+
+                    <p class="terms-text">
+                        Bằng cách tiếp tục, bạn đồng ý với 
+                        <a href="#" class="link">Điều khoản</a> và 
+                        <a href="#" class="link">Chính sách</a> bảo mật của TaJerMy
+                    </p>
+                    
+                    <div class="divider">
+                        <span>Hoặc đăng nhập bằng</span>
+                    </div>      
+                    <div class="social-login">
+                        <button class="social-btn apple-btn" onclick="showRegisterForm()">Đăng ký</button>
+                        <button class="social-btn google-btn">
+                            <img src="hinh-anh/google-logo.png" alt="Google" class="google-icon">
+                        </button>
+                        <button class="social-btn facebook-btn">
+                            <img src="hinh-anh/fb-logo.png" alt="Facebook" class="facebook-icon">
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="phone-contact">
+        <a href="tel:0938062808">
+            <img src="hinh-anh/icon-dt.png" alt="Điện thoại">
+        </a>
+    </div>
+    <div class="cskh-contact" onclick="toggleChat()">
+        <img src="hinh-anh/icon-cskh.png" alt="CSKH">
+    </div>
+    <div class="zalo-contact">
+        <a href="https://zalo.me/0938.062.808" target="_blank">
+            <img src="hinh-anh/icon-zalo.png" alt="Zalo">
+        </a>
+    </div>
+    <div class="youtube-contact">
+        <a href="https://www.youtube.com/@ducphuongmedical" target="_blank">
+            <img src="hinh-anh/youtube-icon.png" alt="YouTube">
+        </a>
+    </div>
+    <div class="facebook-contact">
+        <a href="https://www.facebook.com/ducphuongnguyenphuoctay" target="_blank">
+            <img src="hinh-anh/fb-logo.png" alt="Facebook">
+        </a>
+    </div>
+    
+    <div class="chat-box" id="chatBox">
+        <div class="chat-header">
+            <span>Hỗ trợ</span>
+            <span class="close-chat" onclick="toggleChat()">&times;</span>
+        </div>
+        <div class="chat-content">
+            <div class="chat-message bot">
+                <p>Xin chào! Tôi có thể giúp gì?</p>
+            </div>
+        </div>
+        <div class="chat-input">
+            <input type="text" placeholder="Nhập tin nhắn...">
+            <button>Gửi</button>
+        </div>
+    </div>
+    
+    <!-- Certificate Modal -->
+    <div id="certModal" class="cert-modal">
+        <div class="cert-modal-content">
+            <span class="cert-close" onclick="closeCertModal()">&times;</span>
+            <img id="certModalImg" src="" alt="">
+        </div>
+    </div>
+
+    <script>
+        // Check session on load
+        document.addEventListener('DOMContentLoaded', function() {
+            checkLoginStatus();
+        });
+
+        let isLoggedIn = false;
+
+        function checkLoginStatus() {
+            fetch('/check_session.php')
+                .then(response => response.json())
+                .then(data => {
+                    const accountDropdown = document.querySelector('.account-dropdown');
+                    if (data.logged_in) {
+                        isLoggedIn = true;
+                        if (accountDropdown) accountDropdown.classList.add('logged-in');
+                        
+                        const usernameDisplay = document.getElementById('usernameDisplay');
+                        if (usernameDisplay) {
+                            usernameDisplay.innerText = data.username;
+                            usernameDisplay.style.display = 'block';
+                        }
+                        // Hide login modal if open
+                        closeLoginForm();
+                    } else {
+                        isLoggedIn = false;
+                        if (accountDropdown) accountDropdown.classList.remove('logged-in');
+                        
+                        const usernameDisplay = document.getElementById('usernameDisplay');
+                        if (usernameDisplay) {
+                            usernameDisplay.style.display = 'none';
+                        }
+                    }
+                })
+                .catch(err => console.error('Session check failed', err));
+        }
+
+        function handleAccountClick(event) {
+            event.stopPropagation(); // Ngăn event bubble lên các phần tử cha
+            
+            const accountMenu = document.getElementById('accountMenu');
+            
+            // Kiểm tra trạng thái đăng nhập
+            if (!isLoggedIn) {
+                // Chưa đăng nhập → hiển thị form đăng nhập
+                toggleLoginForm();
+            } else {
+                // Đã đăng nhập → toggle hiển thị menu
+                if (accountMenu.style.display === 'block') {
+                    accountMenu.style.display = 'none';
+                } else {
+                    accountMenu.style.display = 'block';
+                }
+            }
+        }
+
+        // Đóng menu khi click ra ngoài
+        document.addEventListener('click', function(event) {
+            const accountDropdown = document.querySelector('.account-dropdown');
+            const accountMenu = document.getElementById('accountMenu');
+            
+            if (accountDropdown && !accountDropdown.contains(event.target)) {
+                accountMenu.style.display = 'none';
+            }
+        });
+
+        function handleLoginStep1() {
+            const inputVal = document.getElementById('loginInput').value;
+            if (!inputVal) {
+                alert('Vui lòng nhập tên đăng nhập hoặc số điện thoại!');
+                return;
+            }
+            // Switch to step 2
+            document.getElementById('loginStep1').style.display = 'none';
+            document.getElementById('loginStep2').style.display = 'block';
+        }
+
+        function backToStep1() {
+            document.getElementById('loginStep1').style.display = 'block';
+            document.getElementById('loginStep2').style.display = 'none';
+        }
+
+        function handleLoginStep2() {
+            const inputVal = document.getElementById('loginInput').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            if (!password) {
+                alert('Vui lòng nhập mật khẩu!');
+                return;
+            }
+
+            fetch('login.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: inputVal, password: password })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    // Lưu position vào localStorage
+                    if (data.position) {
+                        saveUserPosition(data.position);
+                    }
+                    
+                    // Chuyển hướng trực tiếp không cần thông báo
+                    window.location.href = data.redirect;
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        function handleLogout() {
+            fetch('logout.php')
+                .then(() => {
+                    window.location.reload();
+                });
+        }
+
+        function showRegisterForm() {
+            document.getElementById('loginStep1').style.display = 'none';
+            document.getElementById('loginStep2').style.display = 'none';
+            document.querySelector('.terms-text').style.display = 'none';
+            document.querySelector('.divider').style.display = 'none';
+            document.querySelector('.social-login').style.display = 'none';
+            document.getElementById('registerStep').style.display = 'block';
+            document.getElementById('registerMessage').innerText = '';
+            document.getElementById('regUsername').value = '';
+            document.getElementById('regPhone').value = '';
+            document.getElementById('regGmail').value = '';
+            document.getElementById('regPass').value = '';
+        }
+
+        function backToLogin() {
+            document.getElementById('registerStep').style.display = 'none';
+            document.getElementById('loginStep1').style.display = 'block';
+            document.querySelector('.terms-text').style.display = 'block';
+            document.querySelector('.divider').style.display = 'block';
+            document.querySelector('.social-login').style.display = 'flex';
+        }
+
+        function handleRegister() {
+            const user = document.getElementById('regUsername').value;
+            const phone = document.getElementById('regPhone').value;
+            const gmail = document.getElementById('regGmail').value;
+            const pass = document.getElementById('regPass').value;
+            const msgDiv = document.getElementById('registerMessage');
+
+            if (!user || !phone || !gmail || !pass) {
+                msgDiv.style.color = 'red';
+                msgDiv.innerText = 'Vui lòng nhập đầy đủ thông tin!';
+                return;
+            }
+
+            fetch('/register.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: user, phone: phone, gmail: gmail, password: pass })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    msgDiv.style.color = '#4CAF50';
+                    msgDiv.innerText = 'Đăng ký thành công!';
+                } else {
+                    msgDiv.style.color = 'red';
+                    msgDiv.innerText = data.message;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                msgDiv.style.color = 'red';
+                msgDiv.innerText = 'Có lỗi xảy ra, vui lòng thử lại.';
+            });
+        }
+
+        function toggleRegisterPassword(btn) {
+            const passwordInput = document.getElementById('regPass');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                btn.textContent = '🙈';
+            } else {
+                passwordInput.type = 'password';
+                btn.textContent = '👁️';
+            }
+        }
+
+        function toggleLoginForm() {
+            document.getElementById('loginModal').style.display = 'block';
+            if (typeof backToLogin === 'function') backToLogin();
+            if (typeof backToStep1 === 'function') backToStep1(); 
+            if(document.getElementById('loginInput')) document.getElementById('loginInput').value = '';
+            if(document.getElementById('loginPassword')) document.getElementById('loginPassword').value = '';
+        }
+        
+        function closeLoginForm() {
+            document.getElementById('loginModal').style.display = 'none';
+        }
+        
+        window.onclick = function(event) {
+            var modal = document.getElementById('loginModal');
+            var certModal = document.getElementById('certModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+            if (event.target == certModal) {
+                certModal.style.display = 'none';
+            }
+        }
+        
+        function toggleChat() {
+            const chatBox = document.getElementById('chatBox');
+            chatBox.style.display = chatBox.style.display === 'flex' ? 'none' : 'flex';
+        }
+        
+        function openCertModal(imgSrc, altText) {
+            const modal = document.getElementById('certModal');
+            const modalImg = document.getElementById('certModalImg');
+            modal.style.display = 'flex';
+            modalImg.src = imgSrc;
+            modalImg.alt = altText;
+        }
+        
+        function closeCertModal() {
+            document.getElementById('certModal').style.display = 'none';
+        }
+        
+        const categoryData = {
+            'Giường': ['Giường bệnh cơ bản', 'Giường chuyên dụng (ICU, sản khoa)', 'Giường điều chỉnh độ cao/ tư thế (giường điện)', 'Giường chăm sóc tại nhà'],
+            'Xe lăn': ['Xe lăn tay (người dùng tự đẩy)', 'Xe lăn đẩy sau (người chăm sóc đẩy)', 'Xe lăn điện', 'Xe lăn thể thao', 'Xe lăn gấp gọn/ di chuyển', 'Xe lăn lên xuống cầu thang'],
+            'Xe Scooter điện': ['Loại di chuyển trong nhà/ đường bằng phẳng', 'Loại địa hình (bánh lớn, đi đường dài)', 'Loại gấp gọn/ tháo rời'],
+            'Băng ca': ['Băng ca cấp cứu (cố định)', 'Băng ca đẩy (có bánh xe)', 'Băng ca gấp (vận chuyển)', 'Băng ca chuyên dụng (chống sốc, chụp X-Quang)', 'Đệm vận chuyển'],
+            'Tủ': ['Tủ đựng thuốc', 'Tủ đựng hồ sơ bệnh án', 'Tủ trưng bày/ lưu trữ dụng cụ', 'Tủ đầu giường bệnh'],
+            'Máy tạo oxy': ['Máy tạo oxy tại nhà (loại lớn)', 'Máy tạo oxy xách tay/ di động', 'Máy tạo oxy dòng cao (cho trị liệu đặc biệt)'],
+            'Máy đo': ['Máy đo huyết áp', 'Máy đo đường huyết', 'Máy đo nồng độ oxy trong máu (SpO2)', 'Máy đo thân nhiệt', 'Máy đo tim (ECG di động)', 'Cân sức khỏe (cơ/ điện tử)'],
+            'Máy xông': ['Máy xông khí dung kiểu nén', 'Máy xông siêu âm', 'Máy xông màng (mesh)'],
+            'Máy hút dịch': ['Máy hút dịch để bàn/ cố định', 'Máy hút dịch xách tay/ di động'],
+            'Máy massage': ['Máy massage cầm tay (giảm đau cơ)', 'Đai/ ghế massage toàn thân', 'Máy massage chân (xoa bóp, lưu thông máu)', 'Thiết bị massage trị liệu (như sóng siêu âm, laser cấp thấp)'],
+            'Thiết bị tập': ['Thiết bị tập vận động thụ động (CPM)', 'Thiết bị tập đi/ thăng bằng', 'Thiết bị tập phục hồi chức năng tay/ chân', 'Máy tập thể dục chuyên biệt (xe đạp, treadmill cho phục hồi)', 'Dụng cụ tập trị liệu (bóng, dây kháng lực, tạ tay nhẹ)'],
+            'Nệm': ['Nệm chống loét (hơi, xốp, gel)', 'Nệm bệnh viện tiêu chuẩn', 'Nệm nâng đỡ cơ thể (memory foam, cao su)'],
+            'Dụng cụ hỗ trợ': ['Hỗ trợ di chuyển (khung tập đi, gậy chống, nạng)', 'Hỗ trợ vệ sinh (bô vệ sinh, bồn cầu nâng)', 'Hỗ trợ tắm (ghế tắm, thảm chống trượt)', 'Hỗ trợ mặc quần áo', 'Hỗ trợ ăn uống (thìa, đũa, tay cầm chỉnh)'],
+            'Thiết bị y tế khác': ['Đèn khám bệnh', 'Máy khử rung tim (AED)', 'Bơm tiêm điện', 'Hộp đựng dụng cụ vô trùng', 'Và rất nhiều thiết bị chuyên sâu khác']
+        };
+        
+        document.querySelectorAll('.submenu-content .brand-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                const categoryName = this.textContent.trim();
+                const categoryDetail = document.getElementById('categoryDetail');
+                
+                if (categoryData[categoryName] && categoryDetail) {
+                    const items = categoryData[categoryName];
+                    const itemsPerColumn = Math.ceil(items.length / 3);
+                    
+                    let columns = ['', '', ''];
+                    items.forEach((item, index) => {
+                        const columnIndex = Math.floor(index / itemsPerColumn);
+                        columns[columnIndex] += `<li class="detail-item" data-group="${categoryName}" data-type="${item}">${item}</li>`;
+                    });
+                    
+                    categoryDetail.innerHTML = `
+                        <div class="detail-column">
+                            <h4>${categoryName}</h4>
+                            <ul>${columns[0]}</ul>
+                        </div>
+                        <div class="detail-column">
+                            <ul>${columns[1]}</ul>
+                        </div>
+                        <div class="detail-column">
+                            <ul>${columns[2]}</ul>
+                        </div>
+                    `;
+                }
+            });
+        });
+
+        // Desktop hover detail click-through
+        const detailEl = document.getElementById('categoryDetail');
+        if (detailEl) {
+            detailEl.addEventListener('click', function(e) {
+                const li = e.target.closest('.detail-item');
+                if (!li) return;
+                const group = li.getAttribute('data-group') || '';
+                const type = li.getAttribute('data-type') || '';
+                const url = `san-pham.html?groups=${encodeURIComponent(group)}&types=${encodeURIComponent(type)}`;
+                window.location.href = url;
+            });
+        }
+
+        // Unified Dropdown & Mobile Menu Logic
+        document.addEventListener('DOMContentLoaded', function() {
+            const dropdown = document.querySelector('.dropdown');
+            if (!dropdown) return;
+
+            const dropdownBtn = dropdown.querySelector('.dropdown-btn');
+            const dropdownContent = dropdown.querySelector('.dropdown-content');
+            
+            // Store the original HTML of the main menu
+            const originalMenuHTML = dropdownContent.innerHTML;
+
+            // Data for building category views
+            const categoryIcons = {
+                'Giường': 'icon-hinhdanhmuc/nhom-giuong.png',
+                'Xe lăn': 'icon-hinhdanhmuc/nhom-xelan.png',
+                'Xe Scooter điện': 'icon-hinhdanhmuc/nhom-xedien.png',
+                'Băng ca': 'icon-hinhdanhmuc/nhom-bangca.png',
+                'Tủ': 'icon-hinhdanhmuc/nhom-tu.png',
+                'Máy tạo oxy': 'icon-hinhdanhmuc/nhom-maytaooxy.png',
+                'Máy đo': 'icon-hinhdanhmuc/nhom-maydo.png',
+                'Máy xông': 'icon-hinhdanhmuc/nhom-xong.png',
+                'Máy hút dịch': 'icon-hinhdanhmuc/nhom-mayhutdich.png',
+                'Máy massage': 'icon-hinhdanhmuc/nhom-massage.png',
+                'Thiết bị tập': 'icon-hinhdanhmuc/nhom-maytap.png',
+                'Nệm': 'icon-hinhdanhmuc/nhom-nem.png',
+                'Dụng cụ hỗ trợ': 'icon-hinhdanhmuc/nhom-dungcuhotro.png',
+                'Thiết bị y tế khác': 'icon-hinhdanhmuc/nhom-thietbiyte.png'
+            };
+
+            // Function to generate the HTML for the product categories grid
+            function createProductCategoryHTML() {
+                let gridHTML = '<div class="mobile-category-grid">';
+                Object.keys(categoryData).forEach(categoryName => {
+                    const iconPath = categoryIcons[categoryName] || '';
+                    gridHTML += `
+                        <div class="mobile-category-item" data-category="${categoryName}">
+                            <img src="${iconPath}" alt="${categoryName}" class="mobile-category-icon">
+                            <span>${categoryName}</span>
+                        </div>
+                    `;
+                });
+                gridHTML += '</div>';
+
+                return `
+                    <div class="mobile-menu-header">
+                        <button class="mobile-menu-back-btn">‹ Quay lại</button>
+                        <h3>Danh mục sản phẩm</h3>
+                    </div>
+                    ${gridHTML}
+                `;
+            }
+            
+            // Function to generate sub-category list
+            function createSubCategoryHTML(categoryName) {
+                const subcategories = categoryData[categoryName] || [];
+                let listHTML = '';
+                if (subcategories.length > 0) {
+                    subcategories.forEach(sub => {
+                        listHTML += `<div class="mobile-subcategory-item" data-group="${categoryName}" data-type="${sub}">${sub}</div>`;
+                    });
+                } else {
+                    listHTML = '<div>Không có sản phẩm con.</div>';
+                }
+
+                return `
+                    <div class="mobile-menu-header">
+                        <button class="mobile-menu-back-btn" data-target="main-categories">‹ Danh mục</button>
+                        <h3>${categoryName}</h3>
+                    </div>
+                    <div class="mobile-subcategory-list">${listHTML}</div>
+                `;
+            }
+
+            // Main click handler for the "Danh mục" button
+            dropdownBtn.addEventListener('click', function(event) {
+                if (window.innerWidth <= 768) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    dropdown.classList.toggle('mobile-menu-active');
+                }
+            });
+
+            // Event delegation for handling clicks inside the mobile menu
+            dropdownContent.addEventListener('click', function(event) {
+                if (window.innerWidth > 768) return; // Only run on mobile
+                
+                event.stopPropagation(); // Ngăn chặn sự kiện click lan ra ngoài làm đóng menu
+
+                const target = event.target;
+
+                // Click on "Sản phẩm" to show product categories
+                if (target.matches('.has-submenu')) {
+                    event.preventDefault();
+                    dropdownContent.innerHTML = createProductCategoryHTML();
+                }
+
+                // Click on the "Back" button
+                if (target.matches('.mobile-menu-back-btn')) {
+                    const backTarget = target.getAttribute('data-target');
+                    if (backTarget === 'main-categories') {
+                         dropdownContent.innerHTML = createProductCategoryHTML();
+                    } else {
+                         dropdownContent.innerHTML = originalMenuHTML;
+                    }
+                }
+
+                // Click on a main product category to see sub-categories
+                const categoryItem = target.closest('.mobile-category-item');
+                if (categoryItem) {
+                    const categoryName = categoryItem.getAttribute('data-category');
+                    if (categoryName) {
+                        dropdownContent.innerHTML = createSubCategoryHTML(categoryName);
+                    }
+                }
+                
+                // Clicking a subcategory item should navigate to product listing with filters
+                const subCategoryItem = target.closest('.mobile-subcategory-item');
+                if (subCategoryItem) {
+                    const group = subCategoryItem.getAttribute('data-group') || '';
+                    const type = subCategoryItem.getAttribute('data-type') || '';
+                    const targetUrl = group
+                        ? `san-pham.html?groups=${encodeURIComponent(group)}&types=${encodeURIComponent(type)}`
+                        : `san-pham.html?types=${encodeURIComponent(type)}`;
+                    dropdown.classList.remove('mobile-menu-active');
+                    window.location.href = targetUrl;
+                }
+            });
+
+            // Close mobile menu when clicking outside
+            document.addEventListener('click', function(event) {
+                if (window.innerWidth <= 768) {
+                    if (!dropdown.contains(event.target)) {
+                        dropdown.classList.remove('mobile-menu-active');
+                    }
+                }
+            });
+            
+             // Reset on resize
+            window.addEventListener('resize', function() {
+                dropdown.classList.remove('mobile-menu-active');
+                dropdownContent.innerHTML = originalMenuHTML;
+                // revert desktop hover behavior
+                if (window.innerWidth > 768) {
+                    dropdownContent.style.display = '';
+                }
+            });
+        });
+
+        // Hiệu ứng xuất hiện từ từ (Reveal Animation)
+        function reveal() {
+            var reveals = document.querySelectorAll(".reveal");
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                var elementVisible = 50;
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add("active");
+                }
+            }
+        }
+        window.addEventListener("scroll", reveal);
+        // Kích hoạt ngay khi tải trang
+        reveal();
+        
+        // Exhibition slideshow logic
+        let currentExhibitionIndex = 0;
+        let exhibitionDirection = 1;
+        let exhibitionInterval;
+        const exhibitionTrack = document.getElementById('exhibitionTrack');
+        const exhibitionDots = document.querySelectorAll('#exhibition-section .project-dot');
+        const maxExhibitionIndex = 3; // 4 slides (0-3)
+        
+        function updateExhibitionSlide() {
+            const translateX = -(currentExhibitionIndex * 25); // 25% per slide
+            exhibitionTrack.style.transform = `translateX(${translateX}%)`;
+            updateExhibitionButtons();
+            updateExhibitionDots();
+        }
+        
+        function updateExhibitionDots() {
+            exhibitionDots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentExhibitionIndex);
+            });
+        }
+        
+        function updateExhibitionButtons() {
+            const prevBtn = document.querySelector('#exhibition-section .project-prev-btn');
+            const nextBtn = document.querySelector('#exhibition-section .project-next-btn');
+            
+            if (currentExhibitionIndex === 0 && exhibitionDirection === 1) {
+                prevBtn.style.opacity = '0';
+                prevBtn.style.pointerEvents = 'none';
+            } else {
+                prevBtn.style.opacity = '1';
+                prevBtn.style.pointerEvents = 'auto';
+            }
+            
+            if (currentExhibitionIndex === maxExhibitionIndex && exhibitionDirection === -1) {
+                nextBtn.style.opacity = '0';
+                nextBtn.style.pointerEvents = 'none';
+            } else {
+                nextBtn.style.opacity = '1';
+                nextBtn.style.pointerEvents = 'auto';
+            }
+        }
+        
+        function autoExhibitionSlide() {
+            if (currentExhibitionIndex >= maxExhibitionIndex) {
+                exhibitionDirection = -1;
+            } else if (currentExhibitionIndex <= 0) {
+                exhibitionDirection = 1;
+            }
+            currentExhibitionIndex += exhibitionDirection;
+            updateExhibitionSlide();
+        }
+        
+        function nextExhibitionSlide() { clearInterval(exhibitionInterval); if (currentExhibitionIndex < maxExhibitionIndex) { currentExhibitionIndex++; exhibitionDirection = 1; } else { exhibitionDirection = -1; currentExhibitionIndex--; } updateExhibitionSlide(); exhibitionInterval = setInterval(autoExhibitionSlide, 3000); }
+        function prevExhibitionSlide() { clearInterval(exhibitionInterval); if (currentExhibitionIndex > 0) { currentExhibitionIndex--; exhibitionDirection = -1; } else { exhibitionDirection = 1; currentExhibitionIndex++; } updateExhibitionSlide(); exhibitionInterval = setInterval(autoExhibitionSlide, 3000); }
+        function currentExhibitionSlide(n) { clearInterval(exhibitionInterval); currentExhibitionIndex = n - 1; exhibitionDirection = 1; updateExhibitionSlide(); exhibitionInterval = setInterval(autoExhibitionSlide, 3000); }
+        
+        updateExhibitionSlide();
+        exhibitionInterval = setInterval(autoExhibitionSlide, 3000);
+
+        // Project Info slideshow logic
+        let currentProjectInfoIndex = 0;
+        let projectInfoDirection = 1;
+        let projectInfoInterval;
+        const projectInfoTrack = document.getElementById('projectTrackInfo');
+        const projectInfoDots = document.querySelectorAll('#projects-section-info .project-dot');
+        const maxProjectInfoIndex = 3; // 4 slides
+        
+        function updateProjectInfoSlide() {
+            const translateX = -(currentProjectInfoIndex * 25);
+            projectInfoTrack.style.transform = `translateX(${translateX}%)`;
+            updateProjectInfoButtons();
+            updateProjectInfoDots();
+        }
+        
+        function updateProjectInfoDots() {
+            projectInfoDots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentProjectInfoIndex);
+            });
+        }
+        
+        function updateProjectInfoButtons() {
+            const prevBtn = document.querySelector('#projects-section-info .project-prev-btn');
+            const nextBtn = document.querySelector('#projects-section-info .project-next-btn');
+            
+            if (currentProjectInfoIndex === 0 && projectInfoDirection === 1) {
+                prevBtn.style.opacity = '0';
+                prevBtn.style.pointerEvents = 'none';
+            } else {
+                prevBtn.style.opacity = '1';
+                prevBtn.style.pointerEvents = 'auto';
+            }
+            
+            if (currentProjectInfoIndex === maxProjectInfoIndex && projectInfoDirection === -1) {
+                nextBtn.style.opacity = '0';
+                nextBtn.style.pointerEvents = 'none';
+            } else {
+                nextBtn.style.opacity = '1';
+                nextBtn.style.pointerEvents = 'auto';
+            }
+        }
+        
+        function autoProjectInfoSlide() {
+            if (currentProjectInfoIndex >= maxProjectInfoIndex) {
+                projectInfoDirection = -1;
+            } else if (currentProjectInfoIndex <= 0) {
+                projectInfoDirection = 1;
+            }
+            currentProjectInfoIndex += projectInfoDirection;
+            updateProjectInfoSlide();
+        }
+        
+        function nextProjectInfoSlide() { clearInterval(projectInfoInterval); if (currentProjectInfoIndex < maxProjectInfoIndex) { currentProjectInfoIndex++; projectInfoDirection = 1; } else { projectInfoDirection = -1; currentProjectInfoIndex--; } updateProjectInfoSlide(); projectInfoInterval = setInterval(autoProjectInfoSlide, 3000); }
+        function prevProjectInfoSlide() { clearInterval(projectInfoInterval); if (currentProjectInfoIndex > 0) { currentProjectInfoIndex--; projectInfoDirection = -1; } else { projectInfoDirection = 1; currentProjectInfoIndex++; } updateProjectInfoSlide(); projectInfoInterval = setInterval(autoProjectInfoSlide, 3000); }
+        function currentProjectInfoSlide(n) { clearInterval(projectInfoInterval); currentProjectInfoIndex = n - 1; projectInfoDirection = 1; updateProjectInfoSlide(); projectInfoInterval = setInterval(autoProjectInfoSlide, 3000); }
+        
+        updateProjectInfoSlide();
+        projectInfoInterval = setInterval(autoProjectInfoSlide, 3000);
+
+        // Factory slideshow logic
+        let currentFactoryIndex = 0;
+        let factoryDirection = 1;
+        let factoryInterval;
+        const factoryTrack = document.getElementById('factoryTrack');
+        const factoryDots = document.querySelectorAll('#factory-section .project-dot');
+        const maxFactoryIndex = 2; // 3 slides
+        
+        function updateFactorySlide() {
+            const translateX = -(currentFactoryIndex * 33.333);
+            factoryTrack.style.transform = `translateX(${translateX}%)`;
+            updateFactoryButtons();
+            updateFactoryDots();
+        }
+        
+        function updateFactoryDots() {
+            factoryDots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentFactoryIndex);
+            });
+        }
+        
+        function updateFactoryButtons() {
+            const prevBtn = document.querySelector('#factory-section .project-prev-btn');
+            const nextBtn = document.querySelector('#factory-section .project-next-btn');
+            
+            if (currentFactoryIndex === 0 && factoryDirection === 1) {
+                prevBtn.style.opacity = '0';
+                prevBtn.style.pointerEvents = 'none';
+            } else {
+                prevBtn.style.opacity = '1';
+                prevBtn.style.pointerEvents = 'auto';
+            }
+            
+            if (currentFactoryIndex === maxFactoryIndex && factoryDirection === -1) {
+                nextBtn.style.opacity = '0';
+                nextBtn.style.pointerEvents = 'none';
+            } else {
+                nextBtn.style.opacity = '1';
+                nextBtn.style.pointerEvents = 'auto';
+            }
+        }
+        
+        function autoFactorySlide() {
+            if (currentFactoryIndex >= maxFactoryIndex) {
+                factoryDirection = -1;
+            } else if (currentFactoryIndex <= 0) {
+                factoryDirection = 1;
+            }
+            currentFactoryIndex += factoryDirection;
+            updateFactorySlide();
+        }
+        
+        function nextFactorySlide() { clearInterval(factoryInterval); if (currentFactoryIndex < maxFactoryIndex) { currentFactoryIndex++; factoryDirection = 1; } else { factoryDirection = -1; currentFactoryIndex--; } updateFactorySlide(); factoryInterval = setInterval(autoFactorySlide, 3000); }
+        function prevFactorySlide() { clearInterval(factoryInterval); if (currentFactoryIndex > 0) { currentFactoryIndex--; factoryDirection = -1; } else { factoryDirection = 1; currentFactoryIndex++; } updateFactorySlide(); factoryInterval = setInterval(autoFactorySlide, 3000); }
+        function currentFactorySlide(n) { clearInterval(factoryInterval); currentFactoryIndex = n - 1; factoryDirection = 1; updateFactorySlide(); factoryInterval = setInterval(autoFactorySlide, 3000); }
+        
+        updateFactorySlide();
+        factoryInterval = setInterval(autoFactorySlide, 3000);
+
+        // --- LOGIC ĐỒNG BỘ DỮ LIỆU TỪ TRANG QUẢN TRỊ ---
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeContentSync();
+        });
+
+        function initializeContentSync() {
+            // 1. Gán ID duy nhất (Logic phải GIỐNG HỆT trang quản trị để khớp ID)
+            const images = document.querySelectorAll('header img, main img, footer img');
+            images.forEach((img, index) => {
+                if (!img.hasAttribute('data-uid')) {
+                    img.setAttribute('data-uid', 'img-' + index);
+                }
+            });
+
+            const textTags = ['h1', 'h2', 'h3', 'h4', 'h5', 'p', 'span', 'li', 'a', 'td', 'th'];
+            let textIndex = 0;
+            textTags.forEach(tagName => {
+                document.querySelectorAll(`header ${tagName}, main ${tagName}, footer ${tagName}`).forEach(el => {
+                    if (!el.hasAttribute('data-uid') && el.innerText.trim().length > 0) {
+                        el.setAttribute('data-uid', 'txt-' + textIndex++);
+                    }
+                });
+            });
+
+            // 2. Load dữ liệu và lắng nghe thay đổi
+            applySavedContent();
+            
+            // Lắng nghe sự kiện thay đổi storage (khi admin cập nhật ở tab khác)
+            window.addEventListener('storage', function(e) {
+                if (e.key === 'siteContentThongTin') {
+                    applySavedContent();
+                }
+            });
+        }
+
+        function applySavedContent() {
+            const savedData = JSON.parse(localStorage.getItem('siteContentThongTin') || '{}');
+            for (const [uid, value] of Object.entries(savedData)) {
+                const element = document.querySelector(`[data-uid="${uid}"]`);
+                if (element) {
+                    if (uid.startsWith('img-')) {
+                        element.src = value;
+                    } else if (uid.startsWith('contact-')) {
+                        element.href = value;
+                    } else {
+                        element.innerText = value;
+                    }
+                }
+            }
+        }
+
+        // Search functionality
+        function removeVietnameseTones(str) {
+            if (!str) return '';
+            str = str.toLowerCase();
+            str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, 'a');
+            str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, 'e');
+            str = str.replace(/ì|í|ị|ỉ|ĩ/g, 'i');
+            str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, 'o');
+            str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, 'u');
+            str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, 'y');
+            str = str.replace(/đ/g, 'd');
+            return str;
+        }
+
+        (function initSearch() {
+            const searchInput = document.querySelector('.search-input');
+            const searchBtn = document.querySelector('.search-btn');
+            
+            if (!searchInput || !searchBtn) return;
+            
+            searchBtn.addEventListener('click', () => {
+                const query = searchInput.value.trim();
+                if (query) {
+                    window.location.href = `san-pham.php?search=${encodeURIComponent(query)}`;
+                }
+            });
+            
+            searchInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    const query = searchInput.value.trim();
+                    if (query) {
+                        window.location.href = `san-pham.php?search=${encodeURIComponent(query)}`;
+                    }
+                }
+            });
+        })();
+    </script>
+    <script src="search-suggestions.js"></script>
+</body>
+</html>

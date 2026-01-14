@@ -1,0 +1,127 @@
+<!-- Profile Modal System - Include vào các trang HTML -->
+
+<!-- Profile Modal -->
+<div id="profileModal" class="profile-modal" style="display: none;">
+    <div class="profile-modal-content">
+        <span class="profile-close" onclick="closeProfileModal()">&times;</span>
+        <h2>Thông tin tài khoản</h2>
+        
+        <!-- Avatar Section -->
+        <div class="profile-avatar-section">
+            <img id="profileAvatar" src="hinh-anh/hinh-tk-macdinh.png" alt="Avatar" class="profile-avatar-img">
+            <input type="file" id="avatarInput" accept="image/*" style="display: none;" onchange="handleAvatarUpload(event)">
+            <button class="profile-btn-secondary" onclick="document.getElementById('avatarInput').click()">Chỉnh sửa avatar</button>
+        </div>
+
+        <!-- User Info Section -->
+        <div class="profile-info-section">
+            <div class="profile-field">
+                <label>Tên người dùng:</label>
+                <input type="text" id="profileUsername" class="profile-input" readonly>
+                <button class="profile-btn-edit" onclick="enableEdit('profileUsername')">✏️</button>
+            </div>
+
+            <div class="profile-field">
+                <label>Số điện thoại:</label>
+                <input type="text" id="profilePhone" class="profile-input" readonly>
+                <button class="profile-btn-change" onclick="openChangePhoneModal()">Thay đổi</button>
+            </div>
+
+            <div class="profile-field">
+                <label>Email:</label>
+                <input type="email" id="profileEmail" class="profile-input" readonly>
+                <button class="profile-btn-change" onclick="openChangeEmailModal()">Thay đổi</button>
+            </div>
+
+            <div class="profile-field">
+                <label>Mật khẩu:</label>
+                <input type="password" id="profilePassword" class="profile-input" value="••••••••" readonly>
+                <a href="#" class="profile-link-change" onclick="openChangePasswordModal(); return false;">Thay đổi mật khẩu</a>
+            </div>
+
+            <div class="profile-field">
+                <label>Địa chỉ:</label>
+                <textarea id="profileAddress" class="profile-textarea" rows="3"></textarea>
+            </div>
+
+            <button class="profile-btn-primary" onclick="saveProfileChanges()">Lưu thay đổi</button>
+        </div>
+    </div>
+</div>
+
+<!-- Change Password Modal -->
+<div id="changePasswordModal" class="profile-modal" style="display: none;">
+    <div class="profile-modal-content profile-modal-small">
+        <span class="profile-close" onclick="closeChangePasswordModal()">&times;</span>
+        <h3>Thay đổi mật khẩu</h3>
+        
+        <div class="profile-field">
+            <label>Mật khẩu cũ:</label>
+            <input type="password" id="oldPassword" class="profile-input">
+        </div>
+
+        <div class="profile-field">
+            <label>Mật khẩu mới:</label>
+            <input type="password" id="newPassword" class="profile-input">
+        </div>
+
+        <div class="profile-field">
+            <label>Mã xác nhận:</label>
+            <div style="display: flex; gap: 10px;">
+                <input type="text" id="passwordVerifyCode" class="profile-input" style="flex: 1;">
+                <button class="profile-btn-secondary" onclick="sendPasswordVerificationCode()">Gửi mã</button>
+            </div>
+            <small style="color: #666;">Mã xác nhận sẽ được gửi đến email của bạn</small>
+        </div>
+
+        <button class="profile-btn-primary" onclick="updatePassword()">Cập nhật mật khẩu</button>
+    </div>
+</div>
+
+<!-- Change Phone Modal -->
+<div id="changePhoneModal" class="profile-modal" style="display: none;">
+    <div class="profile-modal-content profile-modal-small">
+        <span class="profile-close" onclick="closeChangePhoneModal()">&times;</span>
+        <h3>Thay đổi số điện thoại</h3>
+        
+        <div class="profile-field">
+            <label>Số điện thoại mới:</label>
+            <input type="text" id="newPhone" class="profile-input">
+        </div>
+
+        <div class="profile-field">
+            <label>Mã xác nhận:</label>
+            <div style="display: flex; gap: 10px;">
+                <input type="text" id="phoneVerifyCode" class="profile-input" style="flex: 1;">
+                <button class="profile-btn-secondary" onclick="sendPhoneVerificationCode()">Gửi mã</button>
+            </div>
+            <small style="color: #666;">Mã xác nhận sẽ được gửi đến SĐT mới</small>
+        </div>
+
+        <button class="profile-btn-primary" onclick="updatePhone()">Cập nhật SĐT</button>
+    </div>
+</div>
+
+<!-- Change Email Modal -->
+<div id="changeEmailModal" class="profile-modal" style="display: none;">
+    <div class="profile-modal-content profile-modal-small">
+        <span class="profile-close" onclick="closeChangeEmailModal()">&times;</span>
+        <h3>Thay đổi Email</h3>
+        
+        <div class="profile-field">
+            <label>Email mới:</label>
+            <input type="email" id="newEmail" class="profile-input">
+        </div>
+
+        <div class="profile-field">
+            <label>Mã xác nhận:</label>
+            <div style="display: flex; gap: 10px;">
+                <input type="text" id="emailVerifyCode" class="profile-input" style="flex: 1;">
+                <button class="profile-btn-secondary" onclick="sendEmailVerificationCode()">Gửi mã</button>
+            </div>
+            <small style="color: #666;">Mã xác nhận sẽ được gửi đến email mới</small>
+        </div>
+
+        <button class="profile-btn-primary" onclick="updateEmail()">Cập nhật Email</button>
+    </div>
+</div>
